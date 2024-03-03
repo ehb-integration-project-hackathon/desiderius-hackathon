@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:user="http://www.example.com/user"
+           targetNamespace="http://www.example.com/user"
+           elementFormDefault="qualified">
+
+    <!-- Define complex types for User and Address -->
+    <xs:complexType name="User">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="phoneNumber" type="xs:string"/>
+            <xs:element name="birthDate" type="xs:date"/>
+            <xs:element name="companyName" type="xs:string"/>
+            <xs:element name="personalAddress" type="user:Address"/>
+            <xs:element name="companyAddress" type="user:Address"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Address">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="street" type="xs:string"/>
+            <xs:element name="streetNumber" type="xs:string"/>
+            <xs:element name="city" type="xs:string"/>
+            <xs:element name="zip" type="xs:string"/>
+            <xs:element name="country" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Define elements for User and Address -->
+    <xs:element name="user" type="user:User"/>
+    <xs:element name="address" type="user:Address"/>
+
+</xs:schema>

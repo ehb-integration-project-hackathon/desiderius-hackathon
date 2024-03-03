@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Database
+  mysqldb:
+    container_name: mysql-wordpress
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    ports:
+      - 3306:3306
+    volumes:
+      - mysqldb_data:/var/lib/mysql
+    networks:
+      - wpsite
+  # phpmyadmin
+  phpmyadmin:
+    container_name: 'phpmyadmin-wordpress'
+    depends_on:
+      - mysqldb
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: mysqldb
+      MYSQL_ROOT_PASSWORD: password 
+    networks:
+      - wpsite
+  # Wordpress
+  wordpress:
+    container_name: 'wordpress'
+    depends_on:
+      - mysqldb
+    image: wordpress:latest
+    ports:
+      - '8080:80'
+    restart: unless-stopped
+    volumes: ['./wordpress:/var/www/html']
+    environment:
+      WORDPRESS_DB_HOST: mysqldb:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - wpsite
+  # RabbitMQ
+  rabbitmq:
+    container_name: 'rabbitmq'
+    image: rabbitmq:3.13.0-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+    networks:
+      - rabbitmq
+  # Spring AMQP broker
+  springamqp:
+    container_name: 'springamqp'
+    build:
+      context: ./rabbitmq-broker
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "8082:8080"
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+    networks:
+    - rabbitmq
+  
+networks:
+  wpsite:
+  rabbitmq:
+volumes:
+  mysqldb_data:
