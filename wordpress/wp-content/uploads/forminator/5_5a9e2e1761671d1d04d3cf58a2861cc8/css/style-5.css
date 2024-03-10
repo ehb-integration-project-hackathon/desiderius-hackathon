@@ -28,8 +28,8 @@
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-response-message,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-response-message p {
 					font-size: 15px;
-							font-family: inherit;
-							font-weight: 400;
+											font-family: Roboto Mono;
+										font-weight: 400;
 			}
 
 
@@ -59,7 +59,7 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-response-message.forminator-loading,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-response-message.forminator-loading p {
-					color: #666666;
+					color: #ffffff;
 			}
 
 
@@ -86,17 +86,17 @@
 
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-label {
-					font-size: 12px;
-											font-family: Roboto;
-										font-weight: bold;			}
+					font-size: 14px;
+											font-family: Roboto Mono;
+										font-weight: 300;			}
 
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-label {
-					color: #777771;
+					color: #ffffff;
 			}
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-label .forminator-required {
-					color: #E04562;
+					color: #ffffff;
 			}
 
 
@@ -106,10 +106,9 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description p {
-					font-size: 12px;
-							font-family: inherit;
-							font-weight: 400;
-			}
+					font-size: 14px;
+											font-family: Roboto Mono;
+										font-weight: 300;			}
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description a,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description a:hover,
@@ -128,7 +127,7 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description p {
-					color: #777771;
+					color: #ffffff;
 			}
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-description a {
@@ -146,9 +145,8 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-error-message {
 					font-size: 12px;
-							font-family: inherit;
-							font-weight: 500;
-			}
+											font-family: Roboto Mono;
+										font-weight: 300;			}
 
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-error-message {
@@ -159,18 +157,18 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-input,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-input input {
-					font-size: 16px;
-											font-family: Roboto;
+					font-size: 14px;
+											font-family: Roboto Mono;
 										font-weight: normal;			}
 
 
 	#forminator-module-5.forminator-design--flat .forminator-input {
 					background-color: #EDEDED;
-							color: #000000;
+							color: #2544e3;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input.forminator-calculation:disabled {
-					-webkit-text-fill-color: #000000;
+					-webkit-text-fill-color: #2544e3;
 				opacity: 1;
 	}
 
@@ -184,23 +182,23 @@
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input::placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input:-moz-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input::-moz-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input:-ms-input-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-input::-webkit-input-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-is_hover .forminator-input {
@@ -256,23 +254,16 @@
 					color: #000000;
 			}
 
-    
-    #forminator-module-5 .forminator-field .forminator-radio .forminator-radio-image span,
-    #forminator-module-5 .forminator-field .forminator-checkbox .forminator-checkbox-image span {
-                    width: 70px;
-                    height: 70px;
-            }
-
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-textarea {
-					font-size: 16px;
-											font-family: Roboto;
+					font-size: 14px;
+											font-family: Roboto Mono;
 										font-weight: normal;			}
 
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea {
 					background-color: #EDEDED;
-							color: #000000;
+							color: #2544e3;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea:hover {
@@ -299,23 +290,23 @@
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea::placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea:-moz-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea::-moz-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea:-ms-input-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 	#forminator-module-5.forminator-design--flat .forminator-textarea::-webkit-input-placeholder {
-					color: #888888;
+					color: #bcc3e2;
 			}
 
 
@@ -401,7 +392,7 @@
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-consent,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-consent__label,
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-consent__label p {
-					color: #000000;
+					color: #ffffff;
 			}
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-checkbox.forminator-consent .forminator-checkbox-box {
@@ -422,9 +413,9 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat select.forminator-select2 + .forminator-select .selection .select2-selection--single[role="combobox"] .select2-selection__rendered {
 					font-size: 16px;
-											font-family: Roboto;
+											font-family: Roboto Mono;
 							line-height: 22px;
-					font-weight: normal;			}
+					font-weight: 300;			}
 
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-select2 + .forminator-select .selection .select2-selection--single[role="combobox"] {
@@ -471,15 +462,15 @@
 
 
 	.forminator-select-dropdown-container--open .forminator-custom-form-5.forminator-dropdown--flat .select2-search input {
-					font-size: 16px;
-											font-family: Roboto;
+					font-size: 14px;
+											font-family: Roboto Mono;
 							line-height: 22px;
 					font-weight: normal;			}
 
 	.forminator-select-dropdown-container--open .forminator-custom-form-5.forminator-dropdown--flat .select2-results .select2-results__options .select2-results__option {
 					font-size: 16px;
-											font-family: Roboto;
-										font-weight: normal;			}
+											font-family: Roboto Mono;
+										font-weight: 300;			}
 
 
 	.forminator-select-dropdown-container--open .forminator-custom-form-5.forminator-dropdown--flat {
@@ -540,7 +531,7 @@
 
 
 	.forminator-custom-form-5.forminator-calendar--flat {
-									font-family: Roboto;
+									font-family: Roboto Mono;
 						}
 
 
@@ -549,7 +540,7 @@
 			}
 
 	.forminator-custom-form-5.forminator-calendar--flat .ui-datepicker-header .ui-corner-all {
-					background-color: #17A8E3;
+					background-color: #2544e3;
 							color: #FFFFFF;
 			}
 
@@ -839,13 +830,13 @@
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-button-submit {
 					font-size: 14px;
-											font-family: Roboto;
-										font-weight: 500;			}
+											font-family: Roboto Mono;
+										font-weight: 300;			}
 
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-button-submit {
-					background-color: #17A8E3;
-							color: #FFFFFF;
+					background-color: #ffffff;
+							color: #2544e3;
 			}
 
 	.forminator-ui#forminator-module-5.forminator-design--flat .forminator-button-submit:hover {
@@ -1037,7 +1028,7 @@
 		border-style: none;
 		border-radius: 0;
 					background-color: #EDEDED;
-							color: #000000;
+							color: #2544e3;
 				transition: 0.2s ease;
 	}
 
