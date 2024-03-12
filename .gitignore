@@ -35,3 +35,4 @@ rabbitmq-broker/.vscode/
 ### properties file
 rabbitmq-broker\src\main\resources\application.properties
 .env
+mysql-wordpress-data/mysql.sock

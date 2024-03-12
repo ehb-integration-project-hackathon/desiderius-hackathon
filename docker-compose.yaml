@@ -14,7 +14,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - mysqldb_data:/var/lib/mysql
+      - ./mysql-wordpress-data:/var/lib/mysql:delegated
     networks:
       - wpsite
   # phpmyadmin
@@ -40,7 +40,8 @@ services:
     ports:
       - '8080:80'
     restart: unless-stopped
-    volumes: ['./wordpress:/var/www/html']
+    volumes:
+      - ./wordpress:/var/www/html:delegated
     environment:
       WORDPRESS_DB_HOST: mysqldb:3306
       WORDPRESS_DB_USER: wordpress
@@ -82,5 +83,3 @@ services:
 networks:
   wpsite:
   rabbitmq:
-volumes:
-  mysqldb_data:
