@@ -41,7 +41,7 @@ services:
       - '8080:80'
     restart: unless-stopped
     volumes:
-      - ./wordpress:/var/www/html:delegated
+      - ~/wordpress:/var/www/html:delegated
     environment:
       WORDPRESS_DB_HOST: mysqldb:3306
       WORDPRESS_DB_USER: wordpress
