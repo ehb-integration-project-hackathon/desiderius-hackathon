@@ -573,6 +573,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PREFIX", function() { return PREFIX; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUFFIX", function() { return SUFFIX; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PRICE_POSITIONS", function() { return PRICE_POSITIONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TICKET_LABELS", function() { return TICKET_LABELS; });
+var _tribe_editor_config, _tribe_editor_config$;
 const TC = 'tribe-commerce';
 const EDD = 'edd';
 const WOO = 'woo';
@@ -613,6 +615,9 @@ const TICKET_TYPES = {
 const PREFIX = 'prefix';
 const SUFFIX = 'postfix';
 const PRICE_POSITIONS = [PREFIX, SUFFIX];
+
+// eslint-disable-next-line no-undef
+const TICKET_LABELS = (_tribe_editor_config = tribe_editor_config) === null || _tribe_editor_config === void 0 ? void 0 : (_tribe_editor_config$ = _tribe_editor_config.tickets) === null || _tribe_editor_config$ === void 0 ? void 0 : _tribe_editor_config$.ticketLabels;
 
 /***/ }),
 
@@ -2123,19 +2128,18 @@ const getDefaultCurrencyPosition = () => {
  *
  * @param {number} ticketId The ticket ID.
  * @param {string} ticketType The ticket types, e.g. `default`, `series_pass`, etc.
- * @param {object} post The post object.
+ * @param {Object} post The post object.
  */
 const isTicketEditableFromPost = (ticketId, ticketType, post) => {
   /**
    * Filters whether a ticket can be edited from a post.
    *
    * @since 5.8.0
-   *
    * @param {boolean} isEditable Whether or not the ticket can be edited from the post.
    * @param {Object} context The context of the filter.
    * @param {number} context.ticketId The ticket ID.
    * @param {string} context.ticketType The ticket types, e.g. `default`, `series_pass`, etc.
-   * @param {object} context.post The post object.
+   * @param {Object} context.post The post object.
    */
   return Object(external_wp_hooks_["applyFilters"])('tec.tickets.blocks.editTicketFromPost', true, {
     ticketId,
@@ -2143,9 +2147,6 @@ const isTicketEditableFromPost = (ticketId, ticketType, post) => {
     post
   });
 };
-// EXTERNAL MODULE: ./src/modules/data/utils.js
-var utils = __webpack_require__("BNqv");
-
 // CONCATENATED MODULE: ./src/modules/data/blocks/ticket/reducers/tickets/ticket/details.js
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
@@ -2158,7 +2159,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -2643,7 +2643,6 @@ function reducer_objectSpread(target) { for (var i = 1; i < arguments.length; i+
 
 
 
-
 const reducer_DEFAULT_STATE = {
   headerImage: header_image["a" /* DEFAULT_STATE */],
   isSelected: false,
@@ -2785,6 +2784,9 @@ var rsvp_actions = __webpack_require__("qkor");
 // EXTERNAL MODULE: ./src/modules/data/blocks/rsvp/reducers/header-image.js
 var reducers_header_image = __webpack_require__("56gU");
 
+// EXTERNAL MODULE: ./src/modules/data/utils.js
+var utils = __webpack_require__("BNqv");
+
 // EXTERNAL MODULE: external "tribe.common.data"
 var external_tribe_common_data_ = __webpack_require__("ZNLL");
 
@@ -2886,23 +2888,23 @@ function formatTicketFromRestToAttributeFormat(ticket) {
   const sold = (ticket === null || ticket === void 0 ? void 0 : (_ticket$capacity_deta4 = ticket.capacity_details) === null || _ticket$capacity_deta4 === void 0 ? void 0 : _ticket$capacity_deta4.sold) || 0;
   const isShared = capacityType === constants["SHARED"] || capacityType === constants["CAPPED"] || capacityType === constants["GLOBAL"];
   return {
-    "id": ticket.id,
-    "type": ticket.type,
-    "title": ticket.title,
-    "description": ticket.description,
-    "capacityType": capacityType,
-    "price": (ticket === null || ticket === void 0 ? void 0 : ticket.cost) || '0.00',
-    "capacity": capacity,
-    "available": available,
-    "sharedCapacity": capacity,
-    "sold": sold,
-    "shareSold": sold,
-    "isShared": isShared,
-    "currencyDecimalPoint": (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details = ticket.cost_details) === null || _ticket$cost_details === void 0 ? void 0 : _ticket$cost_details.currency_decimal_separator) || '.',
-    "currencyNumberOfDecimals": (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details2 = ticket.cost_details) === null || _ticket$cost_details2 === void 0 ? void 0 : _ticket$cost_details2.currency_decimal_numbers) || 2,
-    "currencyPosition": (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details3 = ticket.cost_details) === null || _ticket$cost_details3 === void 0 ? void 0 : _ticket$cost_details3.currency_position) || 'prefix',
-    "currencySymbol": (ticket === null || ticket === void 0 ? void 0 : ticket.cost_details.currency_symbol) || '$',
-    "currencyThousandsSep": (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details4 = ticket.cost_details) === null || _ticket$cost_details4 === void 0 ? void 0 : _ticket$cost_details4.currency_thousand_separator) || ','
+    id: ticket.id,
+    type: ticket.type,
+    title: ticket.title,
+    description: ticket.description,
+    capacityType: capacityType,
+    price: (ticket === null || ticket === void 0 ? void 0 : ticket.cost) || '0.00',
+    capacity: capacity,
+    available: available,
+    sharedCapacity: capacity,
+    sold: sold,
+    shareSold: sold,
+    isShared: isShared,
+    currencyDecimalPoint: (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details = ticket.cost_details) === null || _ticket$cost_details === void 0 ? void 0 : _ticket$cost_details.currency_decimal_separator) || '.',
+    currencyNumberOfDecimals: (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details2 = ticket.cost_details) === null || _ticket$cost_details2 === void 0 ? void 0 : _ticket$cost_details2.currency_decimal_numbers) || 2,
+    currencyPosition: (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details3 = ticket.cost_details) === null || _ticket$cost_details3 === void 0 ? void 0 : _ticket$cost_details3.currency_position) || 'prefix',
+    currencySymbol: (ticket === null || ticket === void 0 ? void 0 : ticket.cost_details.currency_symbol) || '$',
+    currencyThousandsSep: (ticket === null || ticket === void 0 ? void 0 : (_ticket$cost_details4 = ticket.cost_details) === null || _ticket$cost_details4 === void 0 ? void 0 : _ticket$cost_details4.currency_thousand_separator) || ','
   };
 }
 function* updateUneditableTickets() {
@@ -2932,7 +2934,7 @@ function* updateUneditableTickets() {
   const restFormatUneditableTickets = data.tickets
   // Remove the editable tickets.
   .filter(ticket => !isTicketEditableFromPost(ticket.id, ticket.type, post));
-  let uneditableTickets = [];
+  const uneditableTickets = [];
   if (restFormatUneditableTickets.length >= 1) {
     for (const ticket of restFormatUneditableTickets) {
       const formattedUneditableTicket = yield formatTicketFromRestToAttributeFormat(ticket);
@@ -2944,7 +2946,6 @@ function* updateUneditableTickets() {
    * Fires after the uneditable tickets have been updated from the backend.
    *
    * @since 5.8.0
-   *
    * @param {Object[]} uneditableTickets The uneditable tickets just fetched from the backend.
    */
   Object(external_wp_hooks_["doAction"])('tec.tickets.blocks.uneditableTicketsUpdated', uneditableTickets);
@@ -4967,12 +4968,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteTicket", function() { return deleteTicket; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setTicketInitialState", function() { return setTicketInitialState; });
 /* harmony import */ var _moderntribe_tickets_data_blocks_ticket__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("QFGf");
-/* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("RmXt");
-/* harmony import */ var redux_saga_effects__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__);
 /**
  * Internal dependencies
  */
-
 
 
 //
@@ -8365,11 +8363,11 @@ var external_tribe_modules_propTypes_default = /*#__PURE__*/__webpack_require__.
 var external_tribe_modules_classnames_ = __webpack_require__("K2gz");
 var external_tribe_modules_classnames_default = /*#__PURE__*/__webpack_require__.n(external_tribe_modules_classnames_);
 
-// EXTERNAL MODULE: external "wp.i18n"
-var external_wp_i18n_ = __webpack_require__("l3Sj");
-
 // EXTERNAL MODULE: ./src/modules/elements/index.js + 26 modules
 var modules_elements = __webpack_require__("jHzm");
+
+// EXTERNAL MODULE: ./src/modules/data/blocks/ticket/constants.js
+var constants = __webpack_require__("DOwB");
 
 // CONCATENATED MODULE: ./src/Tickets/Blocks/Tickets/app/editor/not-supported-message/template.js
 /**
@@ -8394,6 +8392,9 @@ NotSupportedMessage.protoTypes = {
 // EXTERNAL MODULE: external "tribe.common.hoc"
 var external_tribe_common_hoc_ = __webpack_require__("Q9xL");
 
+// EXTERNAL MODULE: external "wp.i18n"
+var external_wp_i18n_ = __webpack_require__("l3Sj");
+
 // EXTERNAL MODULE: external "wp.data"
 var external_wp_data_ = __webpack_require__("1ZqX");
 
@@ -8412,6 +8413,7 @@ var external_wp_data_ = __webpack_require__("1ZqX");
 
 
 
+
 const getCurrentPostStatus = () => {
   const {
     status = 'auto-draft'
@@ -8420,7 +8422,9 @@ const getCurrentPostStatus = () => {
 };
 const mapStateToProps = (state, ownProps) => {
   let mappedProps = {
-    content: Object(external_wp_i18n_["__"])('Standard tickets are not yet supported on recurring events. ', 'event-tickets'),
+    // eslint-disable-next-line no-undef
+    content: sprintf( /* Translators: %s - the plural, lowercase label for a ticket. */
+    Object(external_wp_i18n_["__"])('Standard %s are not yet supported on recurring events. ', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase),
     ctaLink: wp.element.createElement("a", {
       className: "helper-link",
       href: "https://evnt.is/1b7a",
@@ -8656,7 +8660,11 @@ var style = __webpack_require__("yJBd");
 
 
 
-const confirmLabel = Object(external_wp_i18n_["__"])('Add a Ticket', 'event-tickets');
+
+
+// eslint-disable-next-line no-undef
+const confirmLabel = sprintf( /* Translators: %s - the singular label for a ticket. */
+Object(external_wp_i18n_["__"])('Add a %s', 'event-tickets'), constants["TICKET_LABELS"].ticket.singular);
 class template_TicketsDashboardAction extends external_React_["PureComponent"] {
   constructor(props) {
     super(props);
@@ -9005,6 +9013,7 @@ var header_image_style = __webpack_require__("HpMw");
  */
 
 
+
 const HeaderImage = _ref => {
   let {
     image,
@@ -9012,10 +9021,15 @@ const HeaderImage = _ref => {
     onRemove,
     onSelect
   } = _ref;
-  const description = !(image !== null && image !== void 0 && image.src) && Object(external_wp_i18n_["__"])( /* eslint-disable-next-line max-len */
-  'Select an image from your Media Library to display on emailed tickets and RSVPs. For best results, use a .jpg, .png, or .gif at least 1160px wide.', 'event-tickets');
+  const description = !(image !== null && image !== void 0 && image.src) &&
+  // eslint-disable-next-line no-undef
+  sprintf( /* Translators: %s - Ticket plural label. */
+  Object(external_wp_i18n_["__"])( /* eslint-disable-next-line max-len */
+  'Select an image from your Media Library to display on emailed %s and RSVPs. For best results, use a .jpg, .png, or .gif at least 1160px wide.', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase);
   const imageUploadProps = {
-    title: Object(external_wp_i18n_["__"])('Ticket Header Image', 'event-tickets'),
+    // eslint-disable-next-line no-undef
+    title: sprintf( /* Translators: %s - Ticket singular label. */
+    Object(external_wp_i18n_["__"])('%s Header Image', 'event-tickets'), constants["TICKET_LABELS"].ticket.singular),
     description,
     className: 'tribe-editor__rsvp__image-upload',
     buttonDisabled: isSettingsLoading,
@@ -9210,6 +9224,7 @@ var availability_style = __webpack_require__("mn9v");
 
 
 
+
 /**
  * @todo: consider changing to _n for better translation compatibility
  */
@@ -9222,20 +9237,34 @@ const Availability = _ref => {
   const Available = wp.element.createElement(modules_elements["NumericLabel"], {
     className: external_tribe_modules_classnames_default()('tribe-editor__tickets__availability-label', 'tribe-editor__tickets__availability-label--available', 'tribe-tooltip'),
     count: available,
-    singular: Object(external_wp_i18n_["__"])('%d ticket available', 'event-tickets'),
-    plural: Object(external_wp_i18n_["__"])('%d tickets available', 'event-tickets')
+    singular: '%d ' +
+    // eslint-disable-next-line no-undef
+    sprintf( /* Translators: %s - ticket singular label, lowercase */
+    Object(external_wp_i18n_["__"])('%s available', 'event-tickets'), constants["TICKET_LABELS"].ticket.singularLowercase),
+    plural: '%d ' +
+    // eslint-disable-next-line no-undef
+    sprintf( /* Translators: %s - ticket plural label, lowercase */
+    Object(external_wp_i18n_["__"])('%s available', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase)
   });
   const Total = wp.element.createElement(modules_elements["NumericLabel"], {
     className: external_tribe_modules_classnames_default()('tribe-editor__tickets__availability-label', 'tribe-editor__tickets__availability-label--total'),
     count: total,
-    singular: Object(external_wp_i18n_["__"])('%d total ticket', 'event-tickets'),
-    plural: Object(external_wp_i18n_["__"])('%d total tickets', 'event-tickets')
+    singular: '%d ' +
+    // eslint-disable-next-line no-undef
+    sprintf( /* Translators: %s - ticket singular label, lowercase */
+    Object(external_wp_i18n_["__"])('total %s', 'event-tickets'), constants["TICKET_LABELS"].ticket.singularLowercase),
+    plural: '%d ' +
+    // eslint-disable-next-line no-undef
+    sprintf( /* Translators: %s - ticket plural label, lowercase */
+    Object(external_wp_i18n_["__"])('total %s', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase)
   });
   return wp.element.createElement("div", {
     className: "tribe-editor__tickets__availability"
-  }, wp.element.createElement(external_React_default.a.Fragment, null, Available, available ? wp.element.createElement(modules_elements["IconWithTooltip"], {
-    propertyName: Object(external_wp_i18n_["__"])( /* eslint-disable-next-line max-len */
-    'Ticket availability is based on the lowest number of inventory, stock, and capacity.', 'event-tickets'),
+  }, wp.element.createElement(external_React_default.a.Fragment, null, Available, available ? wp.element.createElement(modules_elements["IconWithTooltip"]
+  // eslint-disable-next-line no-undef
+  , {
+    propertyName: sprintf( /* Translators: %s - the singular label for a ticket. */
+    Object(external_wp_i18n_["__"])('%s availability is based on the lowest number of inventory, stock, and capacity.', 'event-tickets'), constants["TICKET_LABELS"].ticket.singular),
     icon: wp.element.createElement("span", {
       className: "dashicons dashicons-info-outline"
     })
@@ -9298,16 +9327,18 @@ const availability_container_mapStateToProps = (state, ownProps) => {
  * Internal dependencies
  */
 
+
 const getCreateSingleTicketMessage = postTypeLabel => wp.element.createElement("div", {
   className: "tickets-row-line"
 }, Object(external_wp_i18n_["sprintf"])(
-// Translators: %s is the post type name in human readable form.
-Object(external_wp_i18n_["_x"])('Create standard tickets for this %s. ', 'The message displayed when there are no tickets.', 'event-tickets'), postTypeLabel ? postTypeLabel : ''), wp.element.createElement("a", {
+// Translators: %1$s the plural, lowercase label for a ticket; %2$s is the post type name in human readable form.
+Object(external_wp_i18n_["_x"])('Create standard %1$s for this %2$s. ', 'The message displayed when there are no tickets.', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase, postTypeLabel ? postTypeLabel : ''), wp.element.createElement("a", {
   className: "helper-link",
   href: "https://evnt.is/manage-tickets",
   target: "_blank",
   rel: "noopener noreferrer"
-}, Object(external_wp_i18n_["__"])('Learn more about ticket management', 'event-tickets')));
+}, Object(external_wp_i18n_["sprintf"])( /* Translators: %s - the singular, lowercase label for a ticket. */
+Object(external_wp_i18n_["__"])('Learn more about %s management', 'event-tickets'), constants["TICKET_LABELS"].ticket.singularLowercase)));
 const getInactiveTicketsMessage = _ref => {
   let {
     Warning = null,
@@ -9324,7 +9355,8 @@ const getInactiveTicketsMessage = _ref => {
       className: "tribe-editor__title__help-messages"
     }, wp.element.createElement("div", {
       className: "tickets-row-line"
-    }, Object(external_wp_i18n_["__"])("There is no ecommerce available. To create tickets, you'll need to enable an ecommerce solution.", 'event-tickets')));
+    }, Object(external_wp_i18n_["sprintf"])( /* Translators: %s - the plural label for a ticket. */
+    Object(external_wp_i18n_["__"])("There is no ecommerce available. To create %s, you'll need to enable an ecommerce solution.", 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase)));
   }
   if (!hasCreatedTickets) {
     if (!hasRecurrenceRules) {
@@ -9341,14 +9373,16 @@ const getInactiveTicketsMessage = _ref => {
       className: "tribe-editor__title__help-messages"
     }, wp.element.createElement("div", {
       className: "tickets-row-line"
-    }, Object(external_wp_i18n_["__"])('There are no active tickets. Adjust sale duration to make tickets available', 'event-tickets'))); // eslint-disable-line max-len
+    }, Object(external_wp_i18n_["sprintf"])( /* Translators: %1$s - the plural label for a ticket; %2$s - the plural label for a ticket. */
+    Object(external_wp_i18n_["__"])('There are no active %1$s. Adjust sale duration to make %2$s available', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase, constants["TICKET_LABELS"].ticket.pluralLowercase))); // eslint-disable-line max-len
   }
 
   return wp.element.createElement("div", {
     className: "tribe-editor__title__help-messages"
   }, wp.element.createElement("div", {
     className: "tickets-row-line"
-  }, Object(external_wp_i18n_["__"])('Tickets are not yet available', 'event-tickets')));
+  }, Object(external_wp_i18n_["sprintf"])( /* Translators: %s - the plural label for a ticket. */
+  Object(external_wp_i18n_["__"])('%s are not yet available', 'event-tickets'), constants["TICKET_LABELS"].ticket.plural)));
 };
 const Inactive = _ref2 => {
   let {
@@ -9363,7 +9397,7 @@ const Inactive = _ref2 => {
   } = _ref2;
   return wp.element.createElement(modules_elements["Card"], {
     className: "tribe-editor__card-no-bottom-border",
-    header: Object(external_wp_i18n_["__"])('Tickets', 'event-tickets')
+    header: constants["TICKET_LABELS"].ticket.plural
   }, wp.element.createElement("div", {
     className: "tickets-description"
   }, getInactiveTicketsMessage({
@@ -9570,10 +9604,10 @@ const {
   InnerBlocks
 } = wp.blockEditor;
 
-
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -9596,9 +9630,6 @@ const TicketsContainer = _ref => {
     uneditableTickets,
     uneditableTicketsAreLoading
   } = _ref;
-  if (isSettingsOpen) {
-    return null;
-  }
   const innerBlocksClassName = external_tribe_modules_classnames_default()({
     'tribe-editor__tickets__inner-blocks': true,
     'tribe-editor__tickets__inner-blocks--show': !showInactiveBlock
@@ -9618,7 +9649,7 @@ const TicketsContainer = _ref => {
     className: innerBlocksClassName
   }, wp.element.createElement(modules_elements["Card"], {
     className: cardClassName,
-    header: Object(external_wp_i18n_["__"])('Tickets', 'event-tickets')
+    header: constants["TICKET_LABELS"].ticket.plural
   }, canCreateTickets && wp.element.createElement(InnerBlocks, {
     allowedBlocks: ['tribe/tickets-item']
   }))), showInactiveBlock && !isSettingsOpen && wp.element.createElement(inactive_container, null), canCreateTickets && showUneditableTickets && !hasATicketSelected && wp.element.createElement(external_React_default.a.Fragment, null, wp.element.createElement("div", {
@@ -9735,6 +9766,7 @@ const _excluded = ["provider", "onProviderChange"];
  * Internal dependencies
  */
 
+
 const RadioInput = _ref => {
   let {
       provider,
@@ -9772,11 +9804,17 @@ const Controls = _ref2 => {
   } = _ref2;
   return hasMultipleProviders && wp.element.createElement(external_wp_editor_["InspectorControls"], {
     key: "inspector"
-  }, wp.element.createElement(external_wp_components_["PanelBody"], {
-    title: Object(external_wp_i18n_["__"])('Tickets Settings', 'event-tickets')
+  }, wp.element.createElement(external_wp_components_["PanelBody"]
+  // eslint-disable-next-line no-undef
+  , {
+    title: sprintf( /* Translators: %s - Ticket plural label. */
+    Object(external_wp_i18n_["__"])('%s Settings', 'event-tickets'), constants["TICKET_LABELS"].ticket.plural)
   }, wp.element.createElement(external_wp_components_["PanelRow"], null, wp.element.createElement("fieldset", {
     className: "tribe-editor__tickets-controls-provider"
-  }, wp.element.createElement("legend", null, Object(external_wp_i18n_["__"])('Sell tickets using', 'event-tickets')), message, providers.map((provider, key) => wp.element.createElement(RadioInput, {
+  }, wp.element.createElement("legend", null,
+  // eslint-disable-next-line no-undef
+  sprintf( /* Translators: %s - Ticket plural label. */
+  Object(external_wp_i18n_["__"])('Sell %s using', 'event-tickets'), constants["TICKET_LABELS"].ticket.pluralLowercase)), message, providers.map((provider, key) => wp.element.createElement(RadioInput, {
     key: `provider-option-${key + 1}`,
     provider: provider,
     onProviderChange: onProviderChange,
@@ -9816,14 +9854,22 @@ var with_save_data = __webpack_require__("fIBd");
 
 
 
+const {
+  TICKET_LABELS
+} = blocks_ticket["b" /* constants */];
 const controls_container_mapStateToProps = (state, ownProps) => {
   const isRecurring = Object(external_tribe_common_utils_recurrence_["hasRecurrenceRules"])(state);
-  const message = Object(external_wp_i18n_["__"])('It looks like you have multiple ecommerce plugins active. We recommend running only one at a time. However, if you need to run multiple, please select which one to use to sell tickets for this event. ',
+  // eslint-disable-next-line no-undef
+  const message = sprintf( /* Translators: %s - the plural, lowercase label for a ticket. */
+  Object(external_wp_i18n_["__"])('It looks like you have multiple ecommerce plugins active. We recommend running only one at a time. However, if you need to run multiple, please select which one to use to sell %s for this event. ',
   // eslint-disable-line max-len
-  'event-tickets');
-  const note = Object(external_wp_i18n_["__"])('Note: adjusting this setting will only impact new tickets. Existing tickets will not change. We highly recommend that all tickets for one event use the same ecommerce plugin.',
+  'event-tickets'), TICKET_LABELS.ticket.pluralLowercase);
+
+  // eslint-disable-next-line no-undef
+  const note = sprintf( /* Translators: %1$s - the plural, lowercase label for a ticket; %2$s - the plural, lowercase label for a ticket; %3$s - the plural, lowercase label for a ticket. */
+  Object(external_wp_i18n_["__"])('Note: adjusting this setting will only impact new %1$s. Existing %2$s will not change. We highly recommend that all %3$s for one event use the same ecommerce plugin.',
   // eslint-disable-line max-len
-  'event-tickets');
+  'event-tickets'), TICKET_LABELS.ticket.pluralLowercase, TICKET_LABELS.ticket.pluralLowercase, TICKET_LABELS.ticket.pluralLowercase);
   const messageElement = wp.element.createElement("p", null, message, wp.element.createElement("em", null, note));
   let mappedProps = {
     disabled: false,
@@ -9867,13 +9913,9 @@ var editor_style = __webpack_require__("gRpc");
 
 
 /**
- * WordPress dependencies
- */
-
-
-/**
  * Internal dependencies
  */
+
 
 
 
@@ -9930,7 +9972,7 @@ class template_Tickets extends external_React_["PureComponent"] {
     }
     return wp.element.createElement(external_React_default.a.Fragment, null, wp.element.createElement(modules_elements["Card"], {
       className: "tribe-editor__card tribe-editor__not-supported-message",
-      header: Object(external_wp_i18n_["__"])('Tickets', 'event-tickets')
+      header: constants["TICKET_LABELS"].ticket.plural
     }, wp.element.createElement("div", {
       className: "tribe-editor__title__help-messages"
     }, showWarning && wp.element.createElement(Warning, null)), showUneditableTickets && wp.element.createElement(uneditable_container, {
