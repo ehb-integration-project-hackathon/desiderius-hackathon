@@ -2,7 +2,20 @@ version: '3.8'
 
 services:
   # Database
-  mysqldb:
+  mysqldbuuid:
+    container_name: mysql-uuid
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: uuid
+      MYSQL_USER: uuid
+      MYSQL_PASSWORD: uuid
+    ports:
+      - 3307:3306
+    volumes:
+      - ./mysql-uuid-data:/var/lib/mysql
+  mysqldbwp:
     container_name: mysql-wordpress
     image: mysql:latest
     restart: unless-stopped
@@ -14,40 +27,34 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./mysql-wordpress-data:/var/lib/mysql:delegated
-    networks:
-      - wpsite
+      - ./mysql-wordpress-data:/var/lib/mysql
   # phpmyadmin
   phpmyadmin:
     container_name: 'phpmyadmin-wordpress'
     depends_on:
-      - mysqldb
+      - mysqldbwp
     image: phpmyadmin/phpmyadmin
     restart: unless-stopped
     ports:
       - '8081:80'
     environment:
-      PMA_HOST: mysqldb
+      PMA_HOST: mysqldbwp
       MYSQL_ROOT_PASSWORD: password 
-    networks:
-      - wpsite
   # Wordpress
   wordpress:
     container_name: 'wordpress'
     depends_on:
-      - mysqldb
+      - mysqldbwp
     image: wordpress:latest
     ports:
       - '8080:80'
     restart: unless-stopped
     volumes:
-      - ~/wordpress:/var/www/html:delegated
+      - ./wordpress:/var/www/html:delegated
     environment:
-      WORDPRESS_DB_HOST: mysqldb:3306
+      WORDPRESS_DB_HOST: mysqldbwp:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
-    networks:
-      - wpsite
   # RabbitMQ
   rabbitmq:
     container_name: 'rabbitmq'
@@ -62,8 +69,6 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
-    networks:
-      - rabbitmq
   # Spring AMQP broker
   springamqp:
     container_name: 'springamqp'
@@ -72,14 +77,8 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     ports:
-      - "8082:8080"
+      - "8083:8083"
     depends_on:
       - rabbitmq
     environment:
-      RABBITMQ_HOST: rabbitmq
-    networks:
-    - rabbitmq
-  
-networks:
-  wpsite:
-  rabbitmq:
+      SPRING_RABBITMQ_HOST: rabbitmq

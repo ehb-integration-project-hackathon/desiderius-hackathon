@@ -36,3 +36,4 @@ rabbitmq-broker/.vscode/
 rabbitmq-broker\src\main\resources\application.properties
 .env
 mysql-wordpress-data/mysql.sock
+mysql-uuid-data/mysql.sock

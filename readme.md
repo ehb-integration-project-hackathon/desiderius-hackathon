@@ -50,5 +50,5 @@ You can now browse to the localhost wordpress website
 After this configuration, you can synch the folders with synch_wordpress powershell script. [You will need to change parameters!]
 
 Easy command to run container from vscode terminal  
-- `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && docker-compose up -d"`  
+- `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && sudo docker-compose up -d"`  
 - `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && docker-compose down"`

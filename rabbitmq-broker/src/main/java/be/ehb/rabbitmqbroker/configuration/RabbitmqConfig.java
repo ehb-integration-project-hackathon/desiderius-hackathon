@@ -1,8 +1,10 @@
 package be.ehb.rabbitmqbroker.configuration;
 
 import org.springframework.amqp.core.*;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RabbitmqConfig {
@@ -40,6 +42,10 @@ public class RabbitmqConfig {
         return new Queue("sendgrid-queue");
     }
 
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
     //Binding configuration
     @Bean
     public Binding bindingSalesforce(DirectExchange directExchange, Queue salesforce) {

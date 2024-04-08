@@ -1,29 +1,23 @@
 package be.ehb.rabbitmqbroker.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+@JacksonXmlRootElement(localName = "Address")
 public class Address {
-    private Long id;
+
+    @JacksonXmlProperty(localName = "Street")
     private String street;
-    private String streetNumber;
+    @JacksonXmlProperty(localName = "Bus")
+    private String bus;
+    @JacksonXmlProperty(localName = "City")
     private String city;
+    @JacksonXmlProperty(localName = "Zip")
     private String zip;
+    @JacksonXmlProperty(localName = "Country")
     private String country;
 
-    public Address(Long id, String street, String streetNumber, String city, String zip, String country) {
-        this.id = id;
-        this.street = street;
-        this.streetNumber = streetNumber;
-        this.city = city;
-        this.zip = zip;
-        this.country = country;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Getters and Setters
 
     public String getStreet() {
         return street;
@@ -33,12 +27,12 @@ public class Address {
         this.street = street;
     }
 
-    public String getStreetNumber() {
-        return streetNumber;
+    public String getBus() {
+        return bus;
     }
 
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
+    public void setBus(String bus) {
+        this.bus = bus;
     }
 
     public String getCity() {

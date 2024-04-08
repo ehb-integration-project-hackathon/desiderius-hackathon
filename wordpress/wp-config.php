@@ -15,7 +15,7 @@
  *
  * This has been slightly modified (to read environment variables) for use in Docker.
  *
- * @link https://wordpress.org/documentation/article/editing-wp-config-php/
+ * @link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/
  *
  * @package WordPress
  */
@@ -75,14 +75,14 @@ define( 'DB_COLLATE', getenv_docker('WORDPRESS_DB_COLLATE', '') );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         getenv_docker('WORDPRESS_AUTH_KEY',         'e2a41fb45e8fd5c2a119c7b107a4460c8706dd92') );
-define( 'SECURE_AUTH_KEY',  getenv_docker('WORDPRESS_SECURE_AUTH_KEY',  '57a87b1ff3c08091677700259d279d265177c354') );
-define( 'LOGGED_IN_KEY',    getenv_docker('WORDPRESS_LOGGED_IN_KEY',    '23e5f4243e42048b7b17463de26f5926ad00fce7') );
-define( 'NONCE_KEY',        getenv_docker('WORDPRESS_NONCE_KEY',        'b6ecf97c359af94b5e100e7aadc6198e284c52b8') );
-define( 'AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        '3f89c65099151123ba36d3b4c44498355897c2da') );
-define( 'SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', '5f86083e5d921e926d582a0e63d87bc4807a003b') );
-define( 'LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   'dd205b3c5beb1e1abbea9a99be5048b87f1c7f94') );
-define( 'NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       '3d4cbd592b22765f4c327c07dbfdde124f968797') );
+define( 'AUTH_KEY',         getenv_docker('WORDPRESS_AUTH_KEY',         '260c92ee4411bc008fbe3829de95b9f927309b14') );
+define( 'SECURE_AUTH_KEY',  getenv_docker('WORDPRESS_SECURE_AUTH_KEY',  '43020d83dbca403a00fc1fb3bccca429b0d3edca') );
+define( 'LOGGED_IN_KEY',    getenv_docker('WORDPRESS_LOGGED_IN_KEY',    '1077aaebf373442ad0e7fc1edfbdad2c9fca287b') );
+define( 'NONCE_KEY',        getenv_docker('WORDPRESS_NONCE_KEY',        'a5c34ae1abc2a28cd694e84f5e1b7765cb9749d7') );
+define( 'AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        '6d477944ee61988b319176ae88b6ac5e19666782') );
+define( 'SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', '543ecc012030a662977bd8fadf2cd0ca5d9b7242') );
+define( 'LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   '3f12d0dfff4c80a9c075ff9b7332046b634cac59') );
+define( 'NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       '54fe2a451a6da4c9eb0d268a0b970a4905acb6a7') );
 // (See also https://wordpress.stackexchange.com/a/152905/199287)
 
 /**#@-*/
@@ -105,7 +105,7 @@ $table_prefix = getenv_docker('WORDPRESS_TABLE_PREFIX', 'wp_');
  * For information on other constants that can be used for debugging,
  * visit the documentation.
  *
- * @link https://wordpress.org/documentation/article/debugging-in-wordpress/
+ * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
 define( 'WP_DEBUG', !!getenv_docker('WORDPRESS_DEBUG', '') );
 
@@ -131,6 +131,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
-
-// Force Direct Filesystem Method
-define('FS_METHOD', 'direct');
