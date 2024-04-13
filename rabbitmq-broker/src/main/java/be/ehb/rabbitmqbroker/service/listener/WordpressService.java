@@ -46,7 +46,7 @@ public class WordpressService {
 
                 // Send validated XML to the Docker container's webhook with API key in the header
                 HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_XML);
+                headers.setContentType(MediaType.APPLICATION_JSON);
                 //headers.setBearerAuth(apiKey); // Set API key as Bearer token
                 HttpEntity<String> request = new HttpEntity<>(json, headers);
                 String response = restTemplate.postForObject(webhookUrl, request, String.class);
@@ -71,7 +71,8 @@ public class WordpressService {
         return "{\n" +
                 "  \"action\": \"create_user\",\n" +
                 "  \"user_email\": \"" + user.getEmail() + "\",\n" +
-                "  \"first_name\": \"" + user.getFirstName() + "\"\n" +
+                "  \"first_name\": \"" + user.getFirstName() + "\",\n" +
+                "  \"user_login\": \"" + user.getFirstName() + "\",\n" +
                 "  \"last_name\": \"" + user.getLastName() + "\"\n" +
                 "}";
     }
