@@ -1,3 +1,7 @@
+### Exclude application.properties
+rabbitmq-broker/src/main/resources/application.properties
+
+### RabbitMQ Broker Project
 rabbitmq-broker/HELP.md
 rabbitmq-broker/target/
 !rabbitmq-broker/.mvn/wrapper/maven-wrapper.jar
@@ -32,7 +36,6 @@ rabbitmq-broker/build/
 ### VS Code ###
 rabbitmq-broker/.vscode/
 
-### properties file
+### Other properties files
 wordpress_import_migration.wpress
-rabbitmq-broker/src/main/resources/application.properties
 .env
