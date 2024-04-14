@@ -33,10 +33,6 @@ rabbitmq-broker/build/
 rabbitmq-broker/.vscode/
 
 ### properties file
-rabbitmq-broker\src\main\resources\application.properties
+wordpress_import_migration.wpress
+rabbitmq-broker/src/main/resources/application.properties
 .env
-# Exclude MySQL data directories
-mysql-uuid-data/
-mysql-wordpress-data/
-mysql-wordpress-data/mysql.sock
-mysql-uuid-data/mysql.sock

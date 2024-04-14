@@ -14,7 +14,8 @@ services:
     ports:
       - 3307:3306
     volumes:
-      - ./mysql-uuid-data:/var/lib/mysql
+      - mysql-uuid-data:/var/lib/mysql
+
   mysqldbwp:
     container_name: mysql-wordpress
     image: mysql:latest
@@ -27,7 +28,8 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./mysql-wordpress-data:/var/lib/mysql
+      - mysql-wordpress-data:/var/lib/mysql
+
   # phpmyadmin
   phpmyadmin:
     container_name: 'phpmyadmin-wordpress'
@@ -39,7 +41,8 @@ services:
       - '8081:80'
     environment:
       PMA_HOST: mysqldbwp
-      MYSQL_ROOT_PASSWORD: password 
+      MYSQL_ROOT_PASSWORD: password
+
   # Wordpress
   wordpress:
     container_name: 'wordpress'
@@ -50,11 +53,12 @@ services:
       - '8080:80'
     restart: unless-stopped
     volumes:
-      - ./wordpress:/var/www/html:delegated
+      - wordpress-data:/var/www/html:delegated
     environment:
       WORDPRESS_DB_HOST: mysqldbwp:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
+
   # RabbitMQ
   rabbitmq:
     container_name: 'rabbitmq'
@@ -69,6 +73,7 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+
   # Spring AMQP broker
   springamqp:
     container_name: 'springamqp'
@@ -82,3 +87,8 @@ services:
       - rabbitmq
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
+
+volumes:
+  mysql-uuid-data:
+  mysql-wordpress-data:
+  wordpress-data:

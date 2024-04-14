@@ -8,9 +8,32 @@ This project involves a large-scale integration of various systems for a hackath
 2. In project root run `docker-compose up -d` in terminal to start up containers.
 3. Browse to `http://localhost:8080/` to visit the wordpress frontend.
 
+## Initial Spring rabbitmq-broker setup
+application.properties file must be added
+1. create a new file `application.properties` for example:  
 
+`\desiderius-hackathon\rabbitmq-broker\src\main\resources\application.properties`  
+```
+spring.rabbitmq.host= 127.0.0.1
+spring.rabbitmq.port= 5672
+spring.rabbitmq.username= guest
+spring.rabbitmq.password= guest
+server.port=8083
+```
 
-## Windows slow wordpress workaround
+## Initial Wordpress migration setup
+This must be done once to set up the wordpress website
+
+1. run `docker-compose up -d`
+2. Browse to `http://localhost:8080/` and go trough initial setup (settings don't matter, will be overriden later)
+3. Once logged into the admin pannel go to `Plugins > Add New Plugin`
+4. Install and activate `All-in-One WP Migration` plugin
+5. In terminal run: `docker exec wordpress bash -c "echo -e 'php_value upload_max_filesize 256M\nphp_value post_max_size 256M\nphp_value memory_limit 256M\nphp_value max_execution_time 300\nphp_value max_input_time 300' >> /var/www/html/.htaccess"`
+6. Go to `All-in-One WP Migration > Import` and import file `wordpress_import_migration.wpress`
+7. Enter password
+8. Accept, finish installation and run `docker-compose down && docker-compose up -d`
+
+## Windows slow wordpress workaround (old)
 https://stackoverflow.com/questions/54291859/docker-wordpress-super-slow  
 The problem making wordpress slow is the way Docker wordpress handles it's filemounts.
 Performance is much higher when files are bind-mounted from the Linux filesystem, rather than remoted from the Windows host. This is why we will need to run `docker-compose up -d` from inside a linux filesystem (wsl).
@@ -52,3 +75,4 @@ After this configuration, you can synch the folders with synch_wordpress powersh
 Easy command to run container from vscode terminal  
 - `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && sudo docker-compose up -d"`  
 - `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && docker-compose down"`
+
