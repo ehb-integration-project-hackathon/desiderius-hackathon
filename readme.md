@@ -32,6 +32,7 @@ This must be done once to set up the wordpress website
 6. Go to `All-in-One WP Migration > Import` and import file `wordpress_import_migration.wpress`
 7. Enter password
 8. Accept, finish installation and run `docker-compose down && docker-compose up -d`
+9. Log in as Admin. Go to `Settings > Permalinks` and press `Save Changes` to fix som weird bug
 
 ## Windows slow wordpress workaround (old)
 https://stackoverflow.com/questions/54291859/docker-wordpress-super-slow  

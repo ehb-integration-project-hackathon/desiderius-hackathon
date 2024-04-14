@@ -36,6 +36,8 @@ rabbitmq-broker/build/
 ### VS Code ###
 rabbitmq-broker/.vscode/
 
-### Other properties files
+### file to big for git repo ###
 wordpress_import_migration.wpress
+
+### for passwords etc ###
 .env

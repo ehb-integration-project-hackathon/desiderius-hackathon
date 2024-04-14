@@ -38,7 +38,7 @@ public class RabbitController {
 
                 // Send the validated XML to all queues using their respective routing keys
                 senderService.sendToQueue("salesforce-route", xmlString);
-                senderService.sendToQueue("elastic-route", xmlString);
+                senderService.sendToQueue("elastic-route", json);
                 senderService.sendToQueue("odoo-route", xmlString);
                 senderService.sendToQueue("fossBilling-route", xmlString);
                 senderService.sendToQueue("sendgrid-route", xmlString);
