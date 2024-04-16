@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:user="http://www.example.com/user"
+           targetNamespace="http://www.example.com/user"
+           elementFormDefault="qualified">
+
+    <xs:element name="user">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="firstName" type="xs:string"/>
+                <xs:element name="lastName" type="xs:string"/>
+                <xs:element name="email" type="xs:string"/>
+                <xs:element name="phoneNumber" type="xs:string"/>
+                <xs:element name="birthDate" type="xs:date"/>
+                <xs:element name="companyName" type="xs:string"/>
+                <xs:element name="personalAddress">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="id" type="xs:long"/>
+                            <xs:element name="street" type="xs:string"/>
+                            <xs:element name="streetNumber" type="xs:string"/>
+                            <xs:element name="city" type="xs:string"/>
+                            <xs:element name="zip" type="xs:string"/>
+                            <xs:element name="country" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="companyAddress">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="id" type="xs:long"/>
+                            <xs:element name="street" type="xs:string"/>
+                            <xs:element name="streetNumber" type="xs:string"/>
+                            <xs:element name="city" type="xs:string"/>
+                            <xs:element name="zip" type="xs:string"/>
+                            <xs:element name="country" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="event_type" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
