@@ -1,0 +1,14 @@
+heartbeat.monitors:
+  - type: http
+    schedule: '@every 1s'
+    urls: ["http://localhost:8080/"]
+    name: WordPressFrontend
+    timeout: 5s
+
+
+output.elasticsearch:
+  hosts: ["https://127.0.0.1:9200/"]
+  username:  elastic
+  password: student1
+  protocol: "https"
+  ssl.verification_mode: "none"
