@@ -40,16 +40,13 @@ heartbeat.monitors:
     name: Logstash15044
     timeout: 5s
 
-  # Elasticsearch Monitor
-  - type: http
-    schedule: '@every 1s'  # Check every 10 seconds
-    urls: ["https://localhost:9200/"]
+# Elasticsearch monitor
+  - type: tcp
+    schedule: '@every 1s'
+    hosts: ["localhost:9200"]
     name: Elasticsearch
     timeout: 5s
-    check.request:
-      method: "GET"
-    check.response:
-      status: 200  # Expected status code
+
 
 
 output.elasticsearch:
