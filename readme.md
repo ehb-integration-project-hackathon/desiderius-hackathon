@@ -8,8 +8,11 @@ This project involves a large-scale integration of various systems for a hackath
 2. In project root run `docker-compose up -d` in terminal to start up containers.
 3. Browse to `http://localhost:8080/` to visit the wordpress frontend.
 
-## Initial Spring rabbitmq-broker setup
-application.properties file must be added
+### ! springampq container might fail, just run `docker-compose up --build -d` to rebuild image
+This is due to the database not being ready, this is up untill to this day still an issue with docker and I lost 8 hours troubleshooting this.
+
+## Initial Spring rabbitmq-broker setup (old) replaced by docker-compose config
+application.properties is not needed anymore. You may empty the file. Configuration is don in SPRING_APPLICATION_JSON
 1. create a new file `application.properties` for example:  
 
 `\desiderius-hackathon\rabbitmq-broker\src\main\resources\application.properties`  

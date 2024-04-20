@@ -3,49 +3,87 @@ package be.ehb.rabbitmqbroker.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ConversionService {
 
-    public String wordpressUserJsonToXml(String jsonString) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+    private final XmlMapper xmlMapper;
+    private final SimpleDateFormat jsonDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private final SimpleDateFormat xmlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Parse the JSON string to a JsonNode
-        JsonNode rootNode = objectMapper.readTree(jsonString);
+    // Fields to be included in the XML
+    private final List<String> fieldNames = List.of("FirstName", "LastName", "BirthDate", "Email", "Address");
 
-        // Reformat date fields in the JsonNode
-        JsonNode reformattedNode = reformatDateFields(rootNode, "BirthDate", "yyyy-MM-dd");
+    public ConversionService(ObjectMapper objectMapper, XmlMapper xmlMapper) {
+        this.objectMapper = objectMapper;
+        this.xmlMapper = xmlMapper;
 
-        // Configure the XmlMapper
-        XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
-        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_1_1, true);
-
-        // Convert the JsonNode (with reformatted date fields) to an XML string
-        return xmlMapper.writer().withRootName("User").writeValueAsString(reformattedNode);
+        // Configure XML mapper
+        this.xmlMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        this.xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+        this.xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_1_1, true);
     }
 
+    // Convert JSON string to XML string
+    public String wordpressUserJsonToXml(String jsonString, String uuid) throws Exception {
+        JsonNode rootNode = objectMapper.readTree(jsonString);
+        JsonNode formattedNode = reformatFields(rootNode, uuid);
+        return xmlMapper.writer().withRootName("User").writeValueAsString(formattedNode);
+    }
 
-    private JsonNode reformatDateFields(JsonNode rootNode, String dateFieldName, String targetFormat) throws Exception {
-        if (rootNode.has(dateFieldName) && rootNode.get(dateFieldName).isTextual()) {
-            String dateString = rootNode.get(dateFieldName).asText();
-            Date date = new SimpleDateFormat("dd-MM-yyyy").parse(dateString); // Assume the original format is "dd-MM-yyyy"
-            String formattedDate = new SimpleDateFormat(targetFormat).format(date);
+    // Reformat JSON fields and create XML node
+    private JsonNode reformatFields(JsonNode rootNode, String uuid) throws Exception {
+        ObjectNode formattedNode = JsonNodeFactory.instance.objectNode();
+        formattedNode.put("Uuid", uuid);
 
-            ((ObjectNode) rootNode).put(dateFieldName, formattedDate);
+        // Iterate over field names
+        for (String fieldName : fieldNames) {
+            if (rootNode.has(fieldName)) {
+                if ("BirthDate".equals(fieldName)) {
+                    reformatAndPutDateField(rootNode, formattedNode, fieldName);
+                } else if ("Address".equals(fieldName)) {
+                    // Serialize the Address object to JSON and then deserialize it to XML
+                    ObjectNode addressNode = objectMapper.createObjectNode();
+                    JsonNode addressJsonNode = rootNode.get(fieldName);
+                    addressNode.put("Street", addressJsonNode.get("Street").asText());
+                    addressNode.put("Bus", addressJsonNode.get("Bus").asText());
+                    addressNode.put("City", addressJsonNode.get("City").asText());
+                    addressNode.put("Zip", addressJsonNode.get("Zip").asText());
+                    addressNode.put("Country", addressJsonNode.get("Country").asText());
+                    formattedNode.set(fieldName, addressNode);
+                } else {
+                    formattedNode.put(fieldName, rootNode.get(fieldName).asText());
+                }
+            }
         }
 
-        // Add a timestamp node
-        ((ObjectNode) rootNode).put("Timestamp", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").format(new Date()));
+        // Add Timestamp and CRUD fields
+        formattedNode.put("Timestamp", getCurrentTimestamp());
+        formattedNode.put("CRUD", "create");
+        return formattedNode;
+    }
 
-        return rootNode;
+    // Reformat and put Date field into formattedNode
+    private void reformatAndPutDateField(JsonNode rootNode, ObjectNode formattedNode, String fieldName) throws ParseException {
+        String dateString = rootNode.get(fieldName).asText();
+        Date date = jsonDateFormat.parse(dateString);
+        formattedNode.put(fieldName, xmlDateFormat.format(date));
+    }
+
+    // Get current timestamp in the specified format
+    private String getCurrentTimestamp() {
+        SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return timestampFormat.format(new Date());
     }
 }

@@ -1,6 +1,4 @@
 package be.ehb.rabbitmqbroker.service.listener;
-
-import be.ehb.rabbitmqbroker.validator.ValidateXML;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
