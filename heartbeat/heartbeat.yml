@@ -1,0 +1,57 @@
+heartbeat.monitors:
+  - type: http
+    schedule: '@every 1s'
+    urls: ["http://localhost:8080/"]
+    name: WordPress_Frontend
+    timeout: 5s
+
+# Kibana Monitor
+  - type: http
+    schedule: '@every 1s'  # Check every 5 seconds
+    urls: ["http://localhost:5601/"]
+    name: Kibana
+    timeout: 5s
+
+  # phpMyAdmin for WordPress Monitor
+  - type: http
+    schedule: '@every 1s'  # Check every 5 seconds
+    urls: ["http://localhost:8081/"]
+    name: phpMyAdminWordpress
+    timeout: 5s
+
+  # rabbitmq monitor
+  - type: http
+    schedule: '@every 1s'  # Check every 5 seconds
+    urls: ["http://localhost:15672/"]
+    name: phpMyAdminWordpress
+    timeout: 5s
+
+# logstash1 receive from rabbitmq to elasticsearch
+- type: tcp
+    schedule: '@every 1s'  # Check every 10 seconds
+    hosts: ["localhost:5044"]
+    name: Logstash5044
+    timeout: 5s
+
+# logstash2 send from elasticsearch to rabbitmq
+  - type: tcp
+    schedule: '@every 1s'  # Check every 10 seconds
+    hosts: ["localhost:15044"]
+    name: Logstash15044
+    timeout: 5s
+
+# Elasticsearch monitor
+  - type: tcp
+    schedule: '@every 1s'
+    hosts: ["localhost:9200"]
+    name: Elasticsearch
+    timeout: 5s
+
+
+
+output.elasticsearch:
+  hosts: ["https://127.0.0.1:9200/"]
+  username:  elastic
+  password: student1
+  protocol: "https"
+  ssl.verification_mode: "none"
