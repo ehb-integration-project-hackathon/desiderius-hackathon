@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<User xmlns="http://www.example.com/user">
+    <FirstName>John</FirstName>
+    <LastName>Doe</LastName>
+    <BirthDate>1990-01-01</BirthDate>
+    <Email>john.doe@example.com</Email>
+    <Address>
+        <Street>Main Street</Street>
+        <Bus>2</Bus>
+        <City>Anytown</City>
+        <Zip>12345</Zip>
+        <Country>USA</Country>
+    </Address>
+    <Timestamp>2024-04-20T12:00:00</Timestamp>
+    <CRUD>Create</CRUD>
+    <uid>id</uid>
+</User>

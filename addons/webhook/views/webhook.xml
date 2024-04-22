@@ -1,0 +1,10 @@
+<odoo>
+    <template id="webhook" name="Webhook List">
+        <h1>Partner List</h1>
+        <ul>
+            <t t-foreach="records" t-as="record">
+                <li t-esc="record.name"/>
+            </t>
+        </ul>
+    </template>
+</odoo>

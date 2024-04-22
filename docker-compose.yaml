@@ -1,0 +1,125 @@
+#version: '3.8'
+
+services:
+  # Database
+#  mysqldbuuid:
+#    container_name: mysql-uuid
+#    image: mysql:latest
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: uuid
+#      MYSQL_USER: uuid
+#      MYSQL_PASSWORD: uuid
+#    ports:
+#      - 3307:3306
+#    volumes:
+#      - mysql-uuid-data:/var/lib/mysql
+
+#  mysqldbwp:
+#    container_name: mysql-wordpress
+#    image: mysql:latest
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: wordpress
+#      MYSQL_USER: wordpress
+#      MYSQL_PASSWORD: wordpress
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - mysql-wordpress-data:/var/lib/mysql
+
+  # phpmyadmin
+#  phpmyadmin:
+#    container_name: 'phpmyadmin-wordpress'
+#    depends_on:
+#      - mysqldbwp
+#    image: phpmyadmin/phpmyadmin
+#    restart: unless-stopped
+#    ports:
+#      - '8081:80'
+#    environment:
+#      PMA_HOST: mysqldbwp
+#      MYSQL_ROOT_PASSWORD: password
+
+  # Wordpress
+#  wordpress:
+#    container_name: 'wordpress'
+#    depends_on:
+#      - mysqldbwp
+#    image: wordpress:latest
+#    ports:
+#      - '8080:80'
+#    restart: unless-stopped
+#    volumes:
+#      - wordpress-data:/var/www/html:delegated
+#    environment:
+#      WORDPRESS_DB_HOST: mysqldbwp:3306
+#      WORDPRESS_DB_USER: wordpress
+#      WORDPRESS_DB_PASSWORD: wordpress
+
+  # RabbitMQ
+  rabbitmq:
+    container_name: 'rabbitmq'
+    image: rabbitmq:3.13.0-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+
+  # Spring AMQP broker
+  springamqp:
+    container_name: 'springamqp'
+    build:
+      context: ./rabbitmq-broker
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    depends_on:
+      - rabbitmq
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+
+  db:
+    container_name: postgres
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  odoo:
+    container_name: odoo
+    image: odoo:17.0
+    build:
+      context: ./rabbitmq-broker
+      dockerfile: Dockerfile.odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./addons:/mnt/extra-addons
+    environment:
+      - DB_HOST=db
+      - DB_USER=odoo
+      - DB_PASSWORD=odoo
+
+volumes:
+  #mysql-uuid-data:
+  #mysql-wordpress-data:
+  #wordpress-data:
+  postgres-data:

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="res_partner_list" name="Partner List">
+        <t t-call="web.layout">
+            <div class="container">
+                <h1>Partner List</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="records" t-as="record">
+                            <tr>
+                                <td><a t-attf-href="/webhook/webhook/object/{{ record.id }}"><t t-esc="record.name"/></a></td>
+                                <td><t t-esc="record.email"/></td>
+                                <td><t t-esc="record.phone"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>
