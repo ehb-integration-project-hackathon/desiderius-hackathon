@@ -3,9 +3,9 @@ import json
 
 # User information in JSON format
 user_info = {
-  "user": "kurt",
-  "email": "kurt@test.be",
-  "cell_phone": "0471828457"
+  "user": "kurt5",
+  "email": "kurt20aze@test.be",
+  "cell_phone": "0473728233"
 }
 
 # Convert the dictionary to a JSON string

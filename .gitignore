@@ -1,0 +1,43 @@
+### Exclude application.properties
+rabbitmq-broker/src/main/resources/application.properties
+
+### RabbitMQ Broker Project
+rabbitmq-broker/HELP.md
+rabbitmq-broker/target/
+!rabbitmq-broker/.mvn/wrapper/maven-wrapper.jar
+!rabbitmq-broker/**/src/main/**/target/
+!rabbitmq-broker/**/src/test/**/target/
+
+### STS ###
+rabbitmq-broker/.apt_generated
+rabbitmq-broker/.classpath
+rabbitmq-broker/.factorypath
+rabbitmq-broker/.project
+rabbitmq-broker/.settings
+rabbitmq-broker/.springBeans
+rabbitmq-broker/.sts4-cache
+
+### IntelliJ IDEA ###
+rabbitmq-broker/.idea
+rabbitmq-broker/*.iws
+rabbitmq-broker/*.iml
+rabbitmq-broker/*.ipr
+
+### NetBeans ###
+rabbitmq-broker/nbproject/private/
+rabbitmq-broker/nbbuild/
+rabbitmq-broker/dist/
+rabbitmq-broker/nbdist/
+rabbitmq-broker/.nb-gradle/
+rabbitmq-broker/build/
+!rabbitmq-broker/**/src/main/**/build/
+!rabbitmq-broker/**/src/test/**/build/
+
+### VS Code ###
+rabbitmq-broker/.vscode/
+
+### file to big for git repo ###
+wordpress_import_migration.wpress
+
+### for passwords etc ###
+.env
