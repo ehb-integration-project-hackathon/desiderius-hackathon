@@ -332,9 +332,9 @@ services:
     restart: on-failure
     ports:
       - "8083:8083"
-    depends_on:
-      - rabbitmq
-      - mysqldbuuid
+    # depends_on:
+    #   - rabbitmq
+    #   - mysqldbuuid
     environment:
       SPRING_APPLICATION_JSON: '{
         "server.port" : "8083",
