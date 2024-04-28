@@ -1,5 +1,3 @@
-# import math
-
 from odoo import http, _
 from odoo.http import request
 from odoo.exceptions import ValidationError
@@ -16,7 +14,7 @@ class PartnerController(http.Controller):
             print("Request HTTP data:")
             print(request.httprequest.data)
 
-# Extract XML data from the request
+            # Extract XML data from the request
             xml_data = ET.fromstring(request.httprequest.data)
 
             print("Received XML data:")
@@ -34,7 +32,7 @@ class PartnerController(http.Controller):
             birth_date = xml_data.find('.//ns:BirthDate', namespace)
             email = xml_data.find('.//ns:Email', namespace)
             print("EMAIL:", email.text if first_name is not None else "Not Found")
-            uid = xml_data.find('.//ns:Uid', namespace)
+            Uuid = xml_data.find('.//ns:Uuid', namespace)
 
             # Extract address data
             address_element = xml_data.find('.//ns:Address', namespace)
@@ -54,7 +52,7 @@ class PartnerController(http.Controller):
             if not (first_name.text and last_name.text and email.text):
                 raise ValidationError(_("First name, last name, and email are required"))
             # Check if a partner with the same UID already exists
-            existing_partner = request.env['res.partner'].sudo().search([('uid', '=', uid.text)], limit=1)
+            existing_partner = request.env['res.partner'].sudo().search([('Uuid', '=', Uuid.text)], limit=1)
             if existing_partner:
                 raise ValidationError(_("A partner with the same UID already exists"))
             # Create a new partner record
@@ -67,13 +65,13 @@ class PartnerController(http.Controller):
                 'city': city.text,
                 'zip': zip_code.text,
                 'country_id': request.env['res.country'].search([('name', '=', country)], limit=1).id,
-                'uid': uid.text,
+                'Uuid': Uuid.text,
                 # Add other fields as needed
             })
             # Return success response with the ID of the created partner
             response_data = f"""
                 <response>
-                    <result>{partner.uid}</result>
+                    <result>{partner.Uuid}</result>
                     <message>Successfully created partner</message>
                 </response>
             """
@@ -101,8 +99,8 @@ class PartnerController(http.Controller):
 
 
 
-    @http.route('/api/partners/<string:uid>', auth="public", type="http", methods=['PUT'], csrf=False)
-    def update_partner(self, uid, **kwargs):
+    @http.route('/api/partners/<string:Uuid>', auth="public", type="http", methods=['PUT'], csrf=False)
+    def update_partner(self, Uuid, **kwargs):
         try:
             # Extract XML data from the request
             xml_data = ET.fromstring(request.httprequest.data)
@@ -146,7 +144,7 @@ class PartnerController(http.Controller):
                 'country_id': request.env['res.country'].search([('name', '=', country.text if country is not None else False)], limit=1).id,
             }
             # Find the partner to update using the uid field
-            partner = request.env['res.partner'].sudo().search([('uid', '=', uid)], limit=1)
+            partner = request.env['res.partner'].sudo().search([('Uuid', '=', Uuid)], limit=1)
             if not partner:
                 return Response(json.dumps({'result': False, 'message': _("Partner not found")}), content_type='application/json', status=404)
 
@@ -174,16 +172,16 @@ class PartnerController(http.Controller):
     #
     #     except Exception as e:
     #         return Response(json.dumps({'result': False, 'message': _(f"Error deleting partner: {e}")}), content_type='application/json', status=500)
-    @http.route('/api/partners/<string:uid>', auth="public", type="http", methods=['DELETE'], csrf=False)
-    def delete_partner(self, uid):
+    @http.route('/api/partners/<string:Uuid>', auth="public", type="http", methods=['DELETE'], csrf=False)
+    def delete_partner(self, Uuid):
         try:
             # Find the partner to delete using the uid field
-            partner = request.env['res.partner'].sudo().search([('uid', '=', uid)], limit=1)
+            partner = request.env['res.partner'].sudo().search([('Uuid', '=', Uuid)], limit=1)
             if not partner:
                 return Response(json.dumps({'result': False, 'message': _("Partner not found")}), content_type='application/json', status=404)
 
             # Delete the partner
-            partner.unlink(uid)
+            partner.unlink()  # No need to pass Uuid here
 
             return Response(json.dumps({'result': True, 'message': _("Partner deleted successfully")}), content_type='application/json')
 
