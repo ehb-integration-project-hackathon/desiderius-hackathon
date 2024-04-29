@@ -201,7 +201,7 @@ services:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
     ports:
-      - ${KIBANA_PORT}:${KIBANA_CONTAINER_PORT}
+      - ${KIBANA_HOST_PORT}:${KIBANA_CONTAINER_PORT}
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://es01:${ES_CONTAINER_PORT}
