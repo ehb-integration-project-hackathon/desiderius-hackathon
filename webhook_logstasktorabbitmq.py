@@ -2,6 +2,7 @@ from flask import Flask, request, Response
 import xmltodict
 import pika
 import xml.etree.ElementTree as ET
+import requests
 
 app = Flask(__name__)
 
@@ -30,39 +31,55 @@ def handle_webhook():
     # print("\nOuterXML= " + xml_data)
 
     try:
-        # RabbitMQ connection parameters
-        credentials = pika.PlainCredentials('guest', 'guest')  # Replace with your credentials
-        parameters = pika.ConnectionParameters('localhost',
-                                               5672,
-                                               '/',
-                                               credentials)
 
-        # Establish connection and channel
-        connection = pika.BlockingConnection(parameters)
-        channel = connection.channel()
+        # Define the URL
+        url = 'http://localhost:8083/new-user-elk'
 
-        # Declare and use a specific queue name
-        #queue_name = 'your_queue_name_here'
-        #channel.queue_declare(queue=queue_name, durable=True)
-
-        # Send the message
-        channel.basic_publish(exchange='hackathon',
-                              routing_key='wordpress-route',
-                              body=xml_data,
-                              properties=pika.BasicProperties(
-                                  delivery_mode=2,  # make message persistent
-                              ))
-        print(" [x] Sent 'User Information JSON message'")
-    except pika.exceptions.AMQPError as err:
-        print(f"Failed to connect or send to RabbitMQ: {err}")
-        return Response("Failed to process data", status=500)
+        # Make the POST request
+        response = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'})
+        
+        # Check the response
+        if response.status_code == 200:
+            print("Data sent successfully!")
+        else:
+            print("Failed to send data. Status code:", response.status_code)
     finally:
-        # Close the connection if it's open
-        print(xml_data)
-        if 'connection' in locals() and connection.is_open:
-            connection.close()
+        print(json_data)
+    #     #code to send to rabbitmq
+    #     # RabbitMQ connection parameters
+    #     credentials = pika.PlainCredentials('guest', 'guest')  # Replace with your credentials
+    #     parameters = pika.ConnectionParameters('localhost',
+    #                                            5672,
+    #                                            '/',
+    #                                            credentials)
 
-    return Response("Data processed successfully", status=200)
+    #     # Establish connection and channel
+    #     connection = pika.BlockingConnection(parameters)
+    #     channel = connection.channel()
+
+    #     # Declare and use a specific queue name
+    #     #queue_name = 'your_queue_name_here'
+    #     #channel.queue_declare(queue=queue_name, durable=True)
+
+    #     # Send the message
+    #     channel.basic_publish(exchange='hackathon',
+    #                           routing_key='wordpress-route',
+    #                           body=xml_data,
+    #                           properties=pika.BasicProperties(
+    #                               delivery_mode=2,  # make message persistent
+    #                           ))
+    #     print(" [x] Sent 'User Information JSON message'")
+    # except pika.exceptions.AMQPError as err:
+    #     print(f"Failed to connect or send to RabbitMQ: {err}")
+    #     return Response("Failed to process data", status=500)
+    # finally:
+    #     # Close the connection if it's open
+    #     print(xml_data)
+    #     if 'connection' in locals() and connection.is_open:
+    #         connection.close()
+
+    # return Response("Data processed successfully", status=200)
+
 
 def convert_json_to_xml(json_data):
     """ Converts JSON data to XML format as specified """

@@ -64,4 +64,44 @@ public class RabbitController {
             // Handle errors...
         }
     }
+
+    @PostMapping(value = "/new-user-elk", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void newUser(@RequestBody String json) {
+        System.out.println("post-request");
+        System.out.println(json);
+
+        try {
+            // Add user to UUID database
+            String uuid = uuidService.newUuidUser(json, "wordpress");
+            System.out.println("uuid: " + uuid);
+
+            // Convert JSON to XML
+            String xmlString = conversionService.wordpressUserJsonToXml(json, uuid);
+            System.out.println("xmlString: " + xmlString);
+
+            // Validate XML against XSD
+            boolean isValid = validationService.validateXmlUser(xmlString);
+
+            if (isValid) {
+                System.out.println("Validation successful.");
+                System.out.println(xmlString);
+
+                // Send the validated XML to all queues using their respective routing keys
+                senderService.sendToQueue("salesforce-route", xmlString);
+                senderService.sendToQueue("elastic-route", json);
+                senderService.sendToQueue("odoo-route", xmlString);
+                senderService.sendToQueue("fossBilling-route", xmlString);
+                senderService.sendToQueue("sendgrid-route", xmlString);
+
+                senderService.sendToQueue("wordpress-route", xmlString);
+            } else {
+                System.out.println("Validation failed.");
+                System.out.println(xmlString);
+                // Handle validation failure...
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle errors...
+        }
+    }
 }
