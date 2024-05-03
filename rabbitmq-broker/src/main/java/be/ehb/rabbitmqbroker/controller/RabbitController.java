@@ -8,7 +8,21 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.util.Map; // Importing Map
+import java.util.HashMap; // Importing HashMap
+import java.util.Collections; // Importing Collections
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import be.ehb.rabbitmqbroker.repository.UserRepository;
+import be.ehb.rabbitmqbroker.repository.UuidRepository;
+import java.util.Optional;
+import be.ehb.rabbitmqbroker.model.User;
+import be.ehb.rabbitmqbroker.model.Uuid;
 @RestController
 public class RabbitController {
 
@@ -16,13 +30,16 @@ public class RabbitController {
     private final ConversionService conversionService;
     private final ValidationService validationService;
     private final UuidService uuidService;
-
+    private final UserRepository userRepository;
+    private final UuidRepository uuidRepository;
     @Autowired
-    public RabbitController(SenderService senderService, ConversionService conversionService, ValidationService validationService, UuidService uuidService) {
+    public RabbitController(SenderService senderService, ConversionService conversionService, ValidationService validationService, UuidService uuidService, UserRepository userRepository,UuidRepository uuidRepository) {
         this.senderService = senderService;
         this.conversionService = conversionService;
         this.validationService = validationService;
         this.uuidService = uuidService;
+        this.userRepository = userRepository;
+        this.uuidRepository = uuidRepository;
     }
 
     @PostMapping(value = "/new-user", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -104,4 +121,64 @@ public class RabbitController {
             // Handle errors...
         }
     }
+
+    @PostMapping(value = "/new-Odoouser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> newUserOdoo(@RequestBody String json) {
+        try {
+            // Add user to UUID database
+            System.out.println("received XML: " + json);
+
+            // Add user to UUID database
+            String uuid = uuidService.newUuidUser(json, "odoo");
+            System.out.println("uuid: " + uuid);
+
+            // Construct JSON response with the UUID
+            Map<String, String> response = new HashMap<>();
+            response.put("uuid", uuid);
+
+            // Return JSON response with the UUID
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error occurred"));
+        }
+    }
+
+
+    @PutMapping(value = "/Odoo-update-user/{uuid}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUser(@PathVariable String uuid, @RequestBody User updatedUser) {
+        // Find the existing Uuid entity by its uuid
+        Optional<Uuid> existingUuidOptional = uuidRepository.findByUuid(uuid);
+        if (existingUuidOptional.isPresent()) {
+            Uuid existingUuid = existingUuidOptional.get();
+
+            // Update the user information
+            User user = existingUuid.getUser();
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+            user.setEmail(updatedUser.getEmail());
+            user.setAddress(updatedUser.getAddress());
+            // Update other user properties as needed
+
+            // Save the updated user
+            userRepository.save(user);
+
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping(value = "/delete-Odoouser/{uuid}")
+    public ResponseEntity<String> deleteUser(@PathVariable String uuid) {
+        try {
+            // Delete the user from the UUID database
+            uuidService.deleteUuidUser(uuid);
+
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user: " + e.getMessage());
+        }
+    }
+
 }

@@ -19,6 +19,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Optional;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.HttpStatus;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class UuidService {
@@ -75,9 +81,62 @@ public class UuidService {
         return savedUUID.getUuid();
     }
 
-    // Method to update UUID for a user
-    public String updateUuidUser(String value) {
-        // Implement logic for updating UUID
-        return "";
+
+    public void updateUuidUser(String jsonUser, String uuidIdentifier, String serviceName) throws JsonProcessingException {
+        // Initialize ObjectMapper with JavaTimeModule for handling Java 8 date/time types
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        // Disable feature to adjust dates to context time zone
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+
+        // Set custom date format for deserialization
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(false).withTimeZone(TimeZone.getDefault()));
+        mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+
+        // Register custom deserializer for LocalDate
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
+        mapper.registerModule(module);
+
+
+        // Deserialize JSON user string into User object
+        User user = mapper.readValue(jsonUser, User.class);
+
+        // Retrieve the existing UUID entity from the database based on the given UUID identifier
+        Optional<Uuid> optionalUuid = uuidRepository.findByUuid(uuidIdentifier);
+        System.out.println("To be update found="+optionalUuid);
+        if (optionalUuid.isPresent()) {
+            Uuid uuid = optionalUuid.get();
+
+            // Update the user details
+            uuid.setUser(user);
+            // Update other fields if necessary
+            uuid.setUpdatedBy(serviceName);
+            uuid.setUpdatedOn(new Timestamp(new Date().getTime()));
+            System.out.println("Before saving");
+            // Save the updated UUID entity to the database
+            uuidRepository.save(uuid);
+            System.out.println("After saving");
+
+        } else {
+            // Handle case when UUID entity with given identifier does not exist
+            System.out.println("UUID with identifier " + uuidIdentifier + " not found");
+        }
     }
+
+    public void deleteUuidUser(String uuid) {
+        // Find the UUID entity by its UUID
+        Optional<Uuid> existingUuid = uuidRepository.findByUuid(uuid);
+
+        if (existingUuid.isPresent()) {
+            // Delete the UUID entity
+            uuidRepository.delete(existingUuid.get());
+        } else {
+            // Handle the case when the UUID is not found
+            System.out.println("USER DOES NOT EXIST");
+        }
+    }
+
 }

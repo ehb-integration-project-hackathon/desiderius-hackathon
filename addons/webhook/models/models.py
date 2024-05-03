@@ -1,7 +1,8 @@
 from odoo import models, fields, api
 import pika
 import datetime
-import uuid
+import requests
+import json
 
 class WebhookWebhook(models.Model):
     _name = 'webhook.webhook'
@@ -15,24 +16,57 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     Uuid = fields.Char('Uuid', unique=True)  # Define custom_id as a Char field to store the custom ID
+
     @api.model
     def create(self, vals):
-        print("UPdate called 1")
-
+        # Check if the bypasshook flag is set to true in the context
         context = self._context or {}
         if context.get('bypass_webhook', False):
             new_partner = super(ResPartner, self).create(vals)
-        else:
-            # Generate a new UUuid if Uuid is not provided
-            # if 'Uuid' not in vals or not vals['Uuid']:
-            vals['Uuid'] = str(uuid.uuid4())  # Generate a new UUuid
-            print("UPdate called 2")
+            return new_partner
 
-            new_partner = super(ResPartner, self).create(vals)
-            self.send_user_webhook(vals['Uuid'], 'Create')
+        # Generate a new UUID using the UuidService
+        headers = {'Content-Type': 'application/json'}
+        print("Received vals:", vals)
 
+
+
+        # Use default values if vals is empty or missing keys
+        last_name = vals.get("LastName", "Default Last Name")
+        street = vals.get("street", "Default Street")
+        bus = vals.get("bus", "")
+        city = vals.get("city", "Default City")
+        zip_code = vals.get("zip", "12345")
+        country = vals.get("country", "Belgium")
+        email = vals.get("email", "default@example.com")
+        first_name = vals.get("name", "Default First Name")
+
+        # Create the data dictionary
+        data = {
+            "LastName": last_name,
+            "Address": {
+                "Street": street,
+                "Bus": bus,
+                "City": city,
+                "Zip": zip_code,
+                "Country": country
+            },
+            "Email": email,
+            "FirstName": first_name,
+        }
+
+        response = requests.post('http://springamqp:8083/new-Odoouser', headers=headers, json=data)
+        response_data = response.json()
+
+        # Extract the uuid from the response data
+        uuid = response_data.get('uuid')
+
+        vals['Uuid'] = uuid
+        print("Successful created=" + uuid)
+
+        # Create the partner record with the generated UUID
+        new_partner = super(ResPartner, self).create(vals)
         return new_partner
-
     @api.model
     def create2(self, vals):
         new_partner = self.env['res.partner'].create(vals)
@@ -42,51 +76,54 @@ class ResPartner(models.Model):
 
     @api.model
     def write(self, vals):
-        # print("UPdate called")
-        # self.send_user_webhook(Uuid, 'Update')  # Only send the 'Update' webhook
-        #
-        # Uuid = vals.get('Uuid', False)
-        # if Uuid:
-        #     print("Uuid=" + Uuid)
-        #
-        # # Call the super method to perform the actual write operation
-        # return super(ResPartner, self).write(vals)
-
         res = super(ResPartner, self).write(vals)
+
+        # Iterate over each updated partner record
         for partner in self:
-            print("UPdate called4")
-            self.send_user_webhook(partner.Uuid, 'Update')  # Only send the 'Update' webhook
+
+            # Extract the UUID of the updated partner
+            uuid = partner.Uuid
+
+            # Prepare the data to be updated
+            data = {
+                "LastName": "Default Lastname",
+                "Address": {
+                    "Street": partner.street,
+                    "Bus": "Default Bus",
+                    "City": partner.city,
+                    "Zip": partner.zip,
+                    "Country": "Default Country"
+                },
+                "Email": partner.email,
+                "FirstName": partner.name
+
+            }
+
+            # Send a request to update the user information
+            headers = {'Content-Type': 'application/json'}
+            response = requests.put(f'http://springamqp:8083/Odoo-update-user/{uuid}', headers=headers, json=data)
+            self.send_user_webhook(partner.Uuid, 'Update')
+
+
+
 
         return res
-        # if 'Uuid' in vals:
-        #     Uuid = vals.pop('Uuid')
-        #     partners_to_update = self.env['res.partner'].sudo().search([('Uuid', '=', Uuid)])
-        #     if partners_to_update:
-        #         res = partners_to_update.write(vals)
-        #         if vals['Uuid']:
-        #             print("UPdate called3")
-        #
-        #             # self.send_user_webhook(Uuid, 'Update')  # Only send the 'Update' webhook
-        #         return res
-        #     else:
-        #         return False
-        # else:
-        #     res = super(ResPartner, self).write(vals)
-        #     for partner in self:
-        #         print("UPdate called4")
 
-
-        # self.send_user_webhook(partner.Uuid, 'Update')  # Only send the 'Update' webhook
-
-        #return res
-
-    # def unlink(self,Uuid):
-    #     self.send_user_webhook(self, 'Delete')
-    #     return super(ResPartner, self).unlink(Uuid)
-    #
     def unlink(self):
         for partner in self:
             self.send_user_webhook(partner.Uuid, 'Delete')
+            # Assuming `uuid` is the UUID of the user you want to delete
+            uuid = partner.Uuid
+
+            # URL for the delete endpoint
+            delete_url = f"http://springamqp:8083/delete-Odoouser/{uuid}"
+
+            # Send DELETE request to delete user
+            response = requests.delete(delete_url)
+
+            # Print response
+            print(response.text)
+
         return super(ResPartner, self).unlink()
 
     def send_user_webhook(self, Uuid, crud_tag):
@@ -119,7 +156,7 @@ class ResPartner(models.Model):
     def create_xml_message(self, partner, crud_tag):
         # Construct XML message according to the schema
         user_xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        user_xml += '<User xmlns="http://www.example.com/user">\n'
+        user_xml += '<User>\n'
         user_xml += ' <Uuid>{}</Uuid>\n'.format(partner.Uuid or "")
         user_xml += ' <FirstName>{}</FirstName>\n'.format(partner.name)
         user_xml += ' <LastName>Unknown</LastName>\n'
