@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,8 +82,31 @@ public class UuidService {
         return savedUUID.getUuid();
     }
 
+    public boolean updateUuidUser( String uuid, User updatedUser){
+        // Find the existing Uuid entity by its uuid
+        Optional<Uuid> existingUuidOptional = uuidRepository.findByUuid(uuid);
+        if (existingUuidOptional.isPresent()) {
+            Uuid existingUuid = existingUuidOptional.get();
 
-    public void updateUuidUser(String jsonUser, String uuidIdentifier, String serviceName) throws JsonProcessingException {
+            // Update the user information
+            User user = existingUuid.getUser();
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+            user.setEmail(updatedUser.getEmail());
+            user.setAddress(updatedUser.getAddress());
+            // Update other user properties as needed
+
+            // Save the updated user
+            userRepository.save(user);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public void updateUuidUserOld(String jsonUser, String uuidIdentifier, String serviceName) throws JsonProcessingException {
         // Initialize ObjectMapper with JavaTimeModule for handling Java 8 date/time types
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

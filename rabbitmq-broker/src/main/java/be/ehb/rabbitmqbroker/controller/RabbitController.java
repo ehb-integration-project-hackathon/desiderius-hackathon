@@ -16,8 +16,6 @@ import java.util.Collections; // Importing Collections
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 import be.ehb.rabbitmqbroker.repository.UserRepository;
 import be.ehb.rabbitmqbroker.repository.UuidRepository;
 import java.util.Optional;
@@ -30,20 +28,18 @@ public class RabbitController {
     private final ConversionService conversionService;
     private final ValidationService validationService;
     private final UuidService uuidService;
-    private final UserRepository userRepository;
-    private final UuidRepository uuidRepository;
+
+
     @Autowired
-    public RabbitController(SenderService senderService, ConversionService conversionService, ValidationService validationService, UuidService uuidService, UserRepository userRepository,UuidRepository uuidRepository) {
+    public RabbitController(SenderService senderService, ConversionService conversionService, ValidationService validationService, UuidService uuidService) {
         this.senderService = senderService;
         this.conversionService = conversionService;
         this.validationService = validationService;
         this.uuidService = uuidService;
-        this.userRepository = userRepository;
-        this.uuidRepository = uuidRepository;
     }
 
     @PostMapping(value = "/new-user", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void newUser(@RequestBody String json) {
+    public void newUserWordpress(@RequestBody String json) {
         System.out.println("post-request");
         System.out.println(json);
 
@@ -83,7 +79,7 @@ public class RabbitController {
     }
 
     @PostMapping(value = "/new-user-elk", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void newUser(@RequestBody String json) {
+    public void newUserElk(@RequestBody String json) {
         System.out.println("post-request");
         System.out.println(json);
 
@@ -147,27 +143,13 @@ public class RabbitController {
 
     @PutMapping(value = "/Odoo-update-user/{uuid}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable String uuid, @RequestBody User updatedUser) {
-        // Find the existing Uuid entity by its uuid
-        Optional<Uuid> existingUuidOptional = uuidRepository.findByUuid(uuid);
-        if (existingUuidOptional.isPresent()) {
-            Uuid existingUuid = existingUuidOptional.get();
-
-            // Update the user information
-            User user = existingUuid.getUser();
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
-            user.setEmail(updatedUser.getEmail());
-            user.setAddress(updatedUser.getAddress());
-            // Update other user properties as needed
-
-            // Save the updated user
-            userRepository.save(user);
-
+        if (uuidService.updateUuidUser(uuid, updatedUser)){
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
     @DeleteMapping(value = "/delete-Odoouser/{uuid}")
     public ResponseEntity<String> deleteUser(@PathVariable String uuid) {
         try {

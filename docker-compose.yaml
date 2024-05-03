@@ -101,7 +101,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
+          "curl -s --cacert config/certs/ca/ca.crt https://es01:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s
@@ -141,7 +141,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
+          "curl -s --cacert config/certs/ca/ca.crt https://es02:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s
@@ -181,7 +181,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
+          "curl -s --cacert config/certs/ca/ca.crt https://es03:${ES_CONTAINER_PORT} | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s
@@ -213,7 +213,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s -I http://localhost:${KIBANA_CONTAINER_PORT} | grep -q 'HTTP/1.1 302 Found'",
+          "curl -s -I http://kibana:${KIBANA_CONTAINER_PORT} | grep -q 'HTTP/1.1 302 Found'",
         ]
       interval: 10s
       timeout: 10s
