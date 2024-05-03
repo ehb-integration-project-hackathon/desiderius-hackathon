@@ -64,6 +64,8 @@ class ResPartner(models.Model):
         vals['Uuid'] = uuid
         print("Successful created=" + uuid)
 
+        self.send_user_webhook(vals['Uuid'], 'Create')
+
         # Create the partner record with the generated UUID
         new_partner = super(ResPartner, self).create(vals)
         return new_partner
