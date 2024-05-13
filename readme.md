@@ -5,8 +5,9 @@ This project involves a large-scale integration of various systems for a hackath
 
 ## How to run
 1. Make sure docker is running.
-2. In project root run `docker-compose up -d` in terminal to start up containers.
-3. Browse to `http://localhost:8080/` to visit the wordpress frontend.
+2. Get .env file an place in project root (`scp .\.env student@10.2.160.71:/home/student/desiderius-hackathon`)
+3. In project root run `docker-compose up -d` in terminal to start up containers.
+4. Browse to `http://localhost:8080/` to visit the wordpress frontend.
 
 ### ! springampq container might fail, just run `docker-compose up --build -d springamqp` to rebuild image
 This is due to the database not being ready, this is up untill to this day still an issue with docker and I lost 8 hours troubleshooting this.
