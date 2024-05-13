@@ -260,6 +260,17 @@ services:
     ports:
       - "${LOGSTASH_HOST2_PORT}:${LOGSTASH_CONTAINER_PORT}"
 
+  #heartbeat container
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:${STACK_VERSION}
+    container_name: heartbeat
+    user: root
+    cap_add:
+      - NET_RAW
+    volumes:
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
+
+
   # Database UUID
   mysqldbuuid:
     container_name: mysql-uuid
