@@ -260,7 +260,7 @@ services:
     ports:
       - "${LOGSTASH_HOST2_PORT}:${LOGSTASH_CONTAINER_PORT}"
 
-  #heartbeat container
+  #heartbeat container for polling other containers
   heartbeat:
     image: docker.elastic.co/beats/heartbeat:${STACK_VERSION}
     container_name: heartbeat
@@ -270,7 +270,7 @@ services:
     volumes:
       - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
 
-  #metricbeat container
+  #metricbeat container for CPU/RAM data
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
     container_name: metricbeat
@@ -280,6 +280,21 @@ services:
     volumes:
       - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
 
+  #filebeat container for logs
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /registry:/usr/share/filebeat/data:rw
+    environment:
+      - ELASTICSEARCH_HOST=https://es01:${ES_CONTAINER_PORT}
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    command: ["--strict.perms=false"]
 
 
   # Database UUID
