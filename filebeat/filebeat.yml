@@ -4,13 +4,17 @@ filebeat.inputs:
     - '/var/lib/docker/containers/*/*.log'  # Typical path for Docker logs
   processors:
     - add_docker_metadata: ~
+    - decode_json_fields:
+        fields: ["message"]
+        target: ""
+        overwrite_keys: true
+        add_error_key: true
 
 output.elasticsearch:
   hosts: ["https://es01:9200"]
   username: "elastic"
   password: "student1"
-  ssl.verification_mode: "none"  # Disable SSL verification if using self-signed certificates
+  ssl.verification_mode: "none"
 
 setup.kibana:
   host: "http://10.2.160.71:5601"
-
