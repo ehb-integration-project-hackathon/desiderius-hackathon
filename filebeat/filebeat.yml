@@ -11,10 +11,11 @@ filebeat.inputs:
         add_error_key: true
 
 output.elasticsearch:
-  hosts: ["https://es01:9200"]
-  username: "elastic"
-  password: "student1"
+  hosts: ["${ELASTIC_HOST}"]
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
+  protocol: "https"
   ssl.verification_mode: "none"
 
 setup.kibana:
-  host: "http://10.2.160.71:5601"
+  host: ${KIBANA_HOST}

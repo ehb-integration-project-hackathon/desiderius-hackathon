@@ -260,25 +260,57 @@ services:
     ports:
       - "${LOGSTASH_HOST2_PORT}:${LOGSTASH_CONTAINER_PORT}"
 
-  #heartbeat container for polling other containers
-  heartbeat:
-    image: docker.elastic.co/beats/heartbeat:${STACK_VERSION}
-    container_name: heartbeat
-    user: root
-    cap_add:
-      - NET_RAW
-    volumes:
-      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
-
   #metricbeat container for CPU/RAM data
   metricbeat:
-    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    build:
+      context: ./metricbeat
+      dockerfile: Dockerfile
+      args:
+        STACK_VERSION: ${STACK_VERSION}
     container_name: metricbeat
     user: root
     cap_add:
       - NET_RAW
+    environment:
+      - ELASTIC_HOST=https://es01:${ES_CONTAINER_PORT}
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     volumes:
-      - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "metricbeat test config -c /usr/share/metricbeat/metricbeat.yml"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  #heartbeat container for polling other containers
+  heartbeat:
+    build:
+      context: ./heartbeat
+      dockerfile: Dockerfile
+      args:
+        STACK_VERSION: ${STACK_VERSION}
+    container_name: heartbeat
+    user: root
+    cap_add:
+      - NET_RAW
+    environment:
+      - KIBANA_HOST=http://kibana:${KIBANA_CONTAINER_PORT}
+      - PHPMYADMIN_WORDPRESS_HOST=http://phpmyadmin-wordpress:${PHPMYADMIN_WP_CONTAINER_PORT}
+      - RABBITMQ_HOST=http://rabbitmq:${RABBITMQ_HTTP_CONTAINER_PORT}
+      - LOGSTASH1_HOST=logstash:${LOGSTASH_CONTAINER_PORT}
+      - LOGSTASH2_HOST=logstash2:${LOGSTASH_CONTAINER_PORT}
+      - ELASTIC_HOST=https://es01:${ES_CONTAINER_PORT}
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+    healthcheck:
+      test: ["CMD-SHELL", "heartbeat test config -c /usr/share/heartbeat/heartbeat.yml"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   #filebeat container for logs
   filebeat:
@@ -291,9 +323,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /registry:/usr/share/filebeat/data:rw
     environment:
-      - ELASTICSEARCH_HOST=https://es01:${ES_CONTAINER_PORT}
-      - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
-      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_HOST=http://kibana:${KIBANA_CONTAINER_PORT}
+      - ELASTIC_HOST=https://es01:${ES_CONTAINER_PORT}
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     command: ["--strict.perms=false"]
 
 

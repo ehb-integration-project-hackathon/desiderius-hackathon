@@ -9,27 +9,26 @@ metricbeat.autodiscover:
       hints.enabled: true
 
 metricbeat.modules:
-- module: docker
-  metricsets:
-    - "container"
-    - "cpu"
-    - "diskio"
-    - "healthcheck"
-    - "info"
-    #- "image"
-    - "memory"
-    - "network"
-  hosts: ["tcp://10.2.160.71:2375"]
-  period: 10s
-  enabled: true
+  - module: docker
+    metricsets:
+      - container
+      - cpu
+      - diskio
+      - healthcheck
+      - info
+      # - image
+      - memory
+      - network
+    hosts: ["unix:///var/run/docker.sock"]
+    period: 10s
+    enabled: true
 
 processors:
   - add_cloud_metadata: ~
 
 output.elasticsearch:
-  hosts: ['https://10.2.160.71:9200']
-  username: elastic
-  password: student1
+  hosts: ["${ELASTIC_HOST}"]
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
   protocol: "https"
   ssl.verification_mode: "none"
-

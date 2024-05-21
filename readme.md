@@ -29,8 +29,6 @@ This must be done once to set up the wordpress website
 9. Log in as Admin. Go to `Settings > Permalinks` and press `Save Changes` to fix som weird bug
 
 
-
-
 ## (old) Initial Spring rabbitmq-broker setup
 application.properties is not needed anymore. You may empty the file. Configuration is don in SPRING_APPLICATION_JSON
 1. create a new file `application.properties` for example:  

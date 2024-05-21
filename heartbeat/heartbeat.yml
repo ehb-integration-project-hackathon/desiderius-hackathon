@@ -1,48 +1,49 @@
+heartbeat.monitors:
   # Kibana Monitor
   - type: http
     schedule: '@every 1s'  # Check every 1 second
-    urls: ["http://10.2.160.71:5601/"]
+    urls: ["${KIBANA_HOST}"]
     name: Kibana
     timeout: 5s
 
   # phpMyAdmin for WordPress Monitor
   - type: http
     schedule: '@every 1s'  # Check every 1 second
-    urls: ["http://10.2.160.71:8081/"]
+    urls: ["${PHPMYADMIN_WORDPRESS_HOST}"]
     name: phpMyAdminWordPress
     timeout: 5s
 
   # RabbitMQ Monitor
   - type: http
     schedule: '@every 1s'  # Check every 1 second
-    urls: ["http://10.2.160.71:15672/"]
-    name: RabbitMQMonitor  # Changed name to avoid duplication
+    urls: ["${RABBITMQ_HOST}"]
+    name: RabbitMQMonitor
     timeout: 5s
 
   # Logstash1 receive from RabbitMQ to Elasticsearch
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["10.2.160.71:5044"]
-    name: Logstash5044
+    hosts: ["${LOGSTASH1_HOST}"]
+    name: Logstash1
     timeout: 5s
 
   # Logstash2 send from Elasticsearch to RabbitMQ
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["10.2.160.71:15044"]
-    name: Logstash15044
+    hosts: ["${LOGSTASH2_HOST}"]
+    name: Logstash2
     timeout: 5s
 
   # Elasticsearch Monitor
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["10.2.160.71:9200"]
+    hosts: ["${ELASTIC_HOST}"]
     name: Elasticsearch
     timeout: 5s
 
 output.elasticsearch:
-  hosts: ["https://10.2.160.71:9200/"]
-  username: elastic
-  password: student1
+  hosts: ["${ELASTIC_HOST}"]
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
   protocol: "https"
   ssl.verification_mode: "none"
