@@ -10,20 +10,10 @@ This project involves a large-scale integration of various systems for a hackath
 4. Browse to `http://localhost:8080/` to visit the wordpress frontend.
 
 ### ! springampq container might fail, just run `docker-compose up --build -d springamqp` to rebuild image
-This is due to the database not being ready, this is up untill to this day still an issue with docker and I lost 8 hours troubleshooting this.
+This is due to the database not being ready, this is up untill to this day still an issue with docker and I lost 8 hours troubleshooting this.  
 
-## Initial Spring rabbitmq-broker setup (old) replaced by docker-compose config
-application.properties is not needed anymore. You may empty the file. Configuration is don in SPRING_APPLICATION_JSON
-1. create a new file `application.properties` for example:  
-
-`\desiderius-hackathon\rabbitmq-broker\src\main\resources\application.properties`  
-```
-spring.rabbitmq.host= 127.0.0.1
-spring.rabbitmq.port= 5672
-spring.rabbitmq.username= guest
-spring.rabbitmq.password= guest
-server.port=8083
-```
+`docker container ls --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"`  
+`docker logs -f desiderius-hackathon_kibana_1`
 
 ## Initial Wordpress migration setup
 This must be done once to set up the wordpress website
@@ -38,7 +28,23 @@ This must be done once to set up the wordpress website
 8. Accept, finish installation and run `docker-compose down && docker-compose up -d`
 9. Log in as Admin. Go to `Settings > Permalinks` and press `Save Changes` to fix som weird bug
 
-## Windows slow wordpress workaround (old)
+
+
+
+## (old) Initial Spring rabbitmq-broker setup
+application.properties is not needed anymore. You may empty the file. Configuration is don in SPRING_APPLICATION_JSON
+1. create a new file `application.properties` for example:  
+
+`\desiderius-hackathon\rabbitmq-broker\src\main\resources\application.properties`  
+```
+spring.rabbitmq.host= 127.0.0.1
+spring.rabbitmq.port= 5672
+spring.rabbitmq.username= guest
+spring.rabbitmq.password= guest
+server.port=8083
+```
+
+## (old) Windows slow wordpress workaround
 https://stackoverflow.com/questions/54291859/docker-wordpress-super-slow  
 The problem making wordpress slow is the way Docker wordpress handles it's filemounts.
 Performance is much higher when files are bind-mounted from the Linux filesystem, rather than remoted from the Windows host. This is why we will need to run `docker-compose up -d` from inside a linux filesystem (wsl).
@@ -80,4 +86,3 @@ After this configuration, you can synch the folders with synch_wordpress powersh
 Easy command to run container from vscode terminal  
 - `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && sudo docker-compose up -d"`  
 - `wsl bash -c "cd /mnt/c/Users/adam/Documents/integration_project/desiderius-hackathon && docker-compose down"`
-

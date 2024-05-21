@@ -44,20 +44,19 @@ public class RabbitController {
         System.out.println(json);
 
         try {
-            // Add user to UUID database
+            // Add user to UUID database and get the newly created UUID
             String uuid = uuidService.newUuidUser(json, "wordpress");
-            System.out.println("uuid: " + uuid);
+            System.out.println("newUserWordpress uuid: " + uuid);
 
-            // Convert JSON to XML
+            // Convert JSON to XML and add UUID to XML
             String xmlString = conversionService.wordpressUserJsonToXml(json, uuid);
-            System.out.println("xmlString: " + xmlString);
+            System.out.println("newUserWordpress xmlString with UUID added: " + xmlString);
 
             // Validate XML against XSD
             boolean isValid = validationService.validateXmlUser(xmlString);
 
             if (isValid) {
-                System.out.println("Validation successful.");
-                System.out.println(xmlString);
+                System.out.println("newUserWordpress Validation successful.: \n Putting XML message on queues: \n" + xmlString);
 
                 // Send the validated XML to all queues using their respective routing keys
                 senderService.sendToQueue("salesforce-route", xmlString);
@@ -66,10 +65,9 @@ public class RabbitController {
                 senderService.sendToQueue("fossBilling-route", xmlString);
                 senderService.sendToQueue("sendgrid-route", xmlString);
 
-                senderService.sendToQueue("wordpress-route", xmlString);
+                //senderService.sendToQueue("wordpress-route", xmlString);
             } else {
-                System.out.println("Validation failed.");
-                System.out.println(xmlString);
+                System.out.println("newUserWordpress Validation failed: \n" + xmlString);
                 // Handle validation failure...
             }
         } catch (Exception e) {

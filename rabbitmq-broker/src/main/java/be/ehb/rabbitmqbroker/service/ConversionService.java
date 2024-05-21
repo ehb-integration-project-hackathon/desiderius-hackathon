@@ -42,7 +42,7 @@ public class ConversionService {
         return xmlMapper.writer().withRootName("User").writeValueAsString(formattedNode);
     }
 
-    // Reformat JSON fields and create XML node
+    // Reformat JSON fields and create XML node with UUID
     private JsonNode reformatFields(JsonNode rootNode, String uuid) throws Exception {
         ObjectNode formattedNode = JsonNodeFactory.instance.objectNode();
         formattedNode.put("Uuid", uuid);

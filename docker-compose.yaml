@@ -270,7 +270,6 @@ services:
     volumes:
       - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
 
-
   # Database UUID
   mysqldbuuid:
     container_name: mysql-uuid
