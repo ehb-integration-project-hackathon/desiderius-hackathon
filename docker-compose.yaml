@@ -270,6 +270,17 @@ services:
     volumes:
       - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:ro
 
+  #metricbeat container
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    container_name: metricbeat
+    user: root
+    cap_add:
+      - NET_RAW
+    volumes:
+      - ./metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+
+
 
   # Database UUID
   mysqldbuuid:
