@@ -222,6 +222,13 @@ services:
   # Logstash
   logstash:
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    depends_on:
+      es01:
+        condition: service_healthy
+      es02:
+        condition: service_healthy
+      es03:
+        condition: service_healthy
     labels:
       co.elastic.logs/module: logstash
     user: root
@@ -242,6 +249,13 @@ services:
 
   logstash2:
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    depends_on:
+      es01:
+        condition: service_healthy
+      es02:
+        condition: service_healthy
+      es03:
+        condition: service_healthy
     labels:
       co.elastic.logs/module: logstash2
     user: root
@@ -328,7 +342,6 @@ services:
       - ELASTIC_USER=${ELASTIC_USER}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     command: ["--strict.perms=false"]
-
 
   # Database UUID
   mysqldbuuid:

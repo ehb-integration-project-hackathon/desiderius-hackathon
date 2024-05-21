@@ -40,8 +40,7 @@ public class RabbitController {
 
     @PostMapping(value = "/new-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void newUserWordpress(@RequestBody String json) {
-        System.out.println("post-request");
-        System.out.println(json);
+        System.out.println("post-request newUserWordpress: \n" + json);
 
         try {
             // Add user to UUID database and get the newly created UUID
@@ -64,7 +63,6 @@ public class RabbitController {
                 senderService.sendToQueue("odoo-route", xmlString);
                 senderService.sendToQueue("fossBilling-route", xmlString);
                 senderService.sendToQueue("sendgrid-route", xmlString);
-
                 //senderService.sendToQueue("wordpress-route", xmlString);
             } else {
                 System.out.println("newUserWordpress Validation failed: \n" + xmlString);
@@ -78,36 +76,32 @@ public class RabbitController {
 
     @PostMapping(value = "/new-user-elk", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void newUserElk(@RequestBody String json) {
-        System.out.println("post-request");
-        System.out.println(json);
+        System.out.println("post-request newUserElk: \n" + json);
 
         try {
-            // Add user to UUID database
+            // Add user to UUID database and get the newly created UUID
             String uuid = uuidService.newUuidUser(json, "wordpress");
-            System.out.println("uuid: " + uuid);
+            System.out.println("newUserElk uuid: " + uuid);
 
-            // Convert JSON to XML
+            // Convert JSON to XML and add UUID to XML
             String xmlString = conversionService.wordpressUserJsonToXml(json, uuid);
-            System.out.println("xmlString: " + xmlString);
+            System.out.println("newUserElk xmlString with UUID added: " + xmlString);
 
             // Validate XML against XSD
             boolean isValid = validationService.validateXmlUser(xmlString);
 
             if (isValid) {
-                System.out.println("Validation successful.");
-                System.out.println(xmlString);
+                System.out.println("newUserElk Validation successful.: \n Putting XML message on queues: \n" + xmlString);
 
                 // Send the validated XML to all queues using their respective routing keys
                 senderService.sendToQueue("salesforce-route", xmlString);
-                senderService.sendToQueue("elastic-route", json);
+                //senderService.sendToQueue("elastic-route", json);
                 senderService.sendToQueue("odoo-route", xmlString);
                 senderService.sendToQueue("fossBilling-route", xmlString);
                 senderService.sendToQueue("sendgrid-route", xmlString);
-
                 senderService.sendToQueue("wordpress-route", xmlString);
             } else {
-                System.out.println("Validation failed.");
-                System.out.println(xmlString);
+                System.out.println("newUserElk Validation failed: \n" + xmlString);
                 // Handle validation failure...
             }
         } catch (Exception e) {
@@ -118,18 +112,17 @@ public class RabbitController {
 
     @PostMapping(value = "/new-Odoouser", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> newUserOdoo(@RequestBody String json) {
+        System.out.println("post-request newUserOdoo: \n" + json);
         try {
             // Add user to UUID database
-            System.out.println("received XML: " + json);
-
-            // Add user to UUID database
             String uuid = uuidService.newUuidUser(json, "odoo");
-            System.out.println("uuid: " + uuid);
+            System.out.println("newUserOdoo uuid: " + uuid);
 
             // Construct JSON response with the UUID
             Map<String, String> response = new HashMap<>();
             response.put("uuid", uuid);
 
+            System.out.println("newUserOdoo sending back UUID" + response);
             // Return JSON response with the UUID
             return ResponseEntity.ok(response);
         } catch (Exception e) {
