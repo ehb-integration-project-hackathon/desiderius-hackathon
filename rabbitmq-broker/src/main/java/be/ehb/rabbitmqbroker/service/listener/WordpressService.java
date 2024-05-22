@@ -40,9 +40,9 @@ public class WordpressService {
             boolean isValid = validationService.validateXmlUser(xmlString);
 
             if (isValid) {
-                System.out.println("Validation listener successful.");
+                System.out.println("Validation wordpress-listener successful.");
                 String json = generateJson(xmlString);
-                System.out.println(json);
+                System.out.println("Generating new JSON in wordpress-listener: \n" + json);
 
                 // Send validated XML to the Docker container's webhook with API key in the header
                 HttpHeaders headers = new HttpHeaders();
@@ -50,7 +50,7 @@ public class WordpressService {
                 //headers.setBearerAuth(apiKey); // Set API key as Bearer token
                 HttpEntity<String> request = new HttpEntity<>(json, headers);
                 String response = restTemplate.postForObject(webhookUrl, request, String.class);
-                System.out.println("Response from webhook: " + response);
+                System.out.println("Response from Wordpress webhook: " + response);
             } else {
                 System.out.println("Validation failed.");
                 System.out.println(xmlString);
