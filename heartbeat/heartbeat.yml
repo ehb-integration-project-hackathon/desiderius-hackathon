@@ -6,13 +6,6 @@ heartbeat.monitors:
     name: Kibana
     timeout: 5s
 
-  # phpMyAdmin for WordPress Monitor
-  - type: http
-    schedule: '@every 1s'  # Check every 1 second
-    urls: ["${PHPMYADMIN_WORDPRESS_HOST}"]
-    name: phpMyAdminWordPress
-    timeout: 5s
-
   # RabbitMQ Monitor
   - type: http
     schedule: '@every 1s'  # Check every 1 second
@@ -20,25 +13,82 @@ heartbeat.monitors:
     name: RabbitMQMonitor
     timeout: 5s
 
+  # Wordpress Frontend Monitor
+  - type: http
+    schedule: '@every 1s'  # Check every 1 second
+    urls: ["10.2.160.71:8080"]
+    name: WordpressFrontend
+    timeout: 5s
+
+
+  # Odoo Monitor
+  - type: http
+    schedule: '@every 1s'  # Check every 1 second
+    urls: ["odoo:8069"]
+    name: Odoo
+    timeout: 5s
+
+
   # Logstash1 receive from RabbitMQ to Elasticsearch
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["${LOGSTASH1_HOST}"]
+    #hosts: ["${LOGSTASH1_HOST}"]
+    hosts: ["10.2.160.71:5044"]
     name: Logstash1
     timeout: 5s
 
   # Logstash2 send from Elasticsearch to RabbitMQ
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["${LOGSTASH2_HOST}"]
+    #hosts: ["${LOGSTASH2_HOST}"]
+    hosts: ["10.2.160.71:15044"]
     name: Logstash2
     timeout: 5s
+
+  # phpMyAdmin for WordPress Monitor
+  - type: tcp
+    schedule: '@every 1s'  # Check every 1 second
+    hosts: ["10.2.160.71:8081"]
+    name: phpMyAdminWordPress
+    timeout: 5s
+
+
+  # phpMyAdmin for UUID Monitor
+  - type: tcp
+    schedule: '@every 1s'  # Check every 1 second
+    hosts: ["10.2.160.71:8079"]
+    name: phpMyAdminUUID
+    timeout: 5s
+
+
 
   # Elasticsearch Monitor
   - type: tcp
     schedule: '@every 1s'  # Check every 1 second
-    hosts: ["${ELASTIC_HOST}"]
+    #hosts: ["${ELASTIC_HOST}"]
+    hosts: ["10.2.160.71:9200"]
     name: Elasticsearch
+    timeout: 5s
+
+  # Postgress database Monitor
+  - type: tcp
+    schedule: '@every 1s'  # Check every 1 second
+    hosts: ["10.2.160.71:5432"]
+    name: PostgressDatabase
+    timeout: 5s
+
+  # Mysql Wordpress database Monitor
+  - type: tcp
+    schedule: '@every 1s'  # Check every 1 second
+    hosts: ["10.2.160.71:3306"]
+    name: MysqlWordpress
+    timeout: 5s
+
+  # Mysql UUID database Monitor
+  - type: tcp
+    schedule: '@every 1s'  # Check every 1 second
+    hosts: ["10.2.160.71:3307"]
+    name: MysqlDatabase
     timeout: 5s
 
 output.elasticsearch:
@@ -47,3 +97,9 @@ output.elasticsearch:
   password: ${ELASTIC_PASSWORD}
   protocol: "https"
   ssl.verification_mode: "none"
+
+# Processor to add observer metadata with geo settings
+processors:
+  - add_observer_metadata:
+      geo:
+        name: europe-brussels
