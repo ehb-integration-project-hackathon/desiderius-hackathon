@@ -3,7 +3,9 @@ import pika
 import datetime
 import requests
 import json
+import logging
 
+_logger = logging.getLogger(__name__)
 class WebhookWebhook(models.Model):
     _name = 'webhook.webhook'
     _description = 'Webhook Webhook'
@@ -174,4 +176,5 @@ class ResPartner(models.Model):
         user_xml += ' <Timestamp>{}</Timestamp>\n'.format(datetime.datetime.now().isoformat())
         user_xml += ' <CRUD>{}</CRUD>\n'.format(crud_tag)
         user_xml += '</User>\n'
+        _logger.info("ODOO request=%s", user_xml)
         return user_xml
